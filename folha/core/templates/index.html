@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load render_table from django_tables2 %}
+{% load static %}
+
+{% block content %}
+
+
+    <section id="matriculas">
+        <div class="matriculas text-align-center row desktop-8 padding-bottom-2 container">
+            <section class="matriculas-form">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <button type="submit" name="go" class="btn-basic">Buscar</button>
+
+                </form>
+            </section>
+        </div>
+
+    </section>
+
+    <section id="contra-cheques">
+        <div class="contra-cheques text-align-center row desktop-8 padding-bottom-2 container">
+            <section class="contra-cheques-form">
+                {% render_table table %}
+            </section>
+        </div>
+
+    </section>
+
+{% endblock content %}
