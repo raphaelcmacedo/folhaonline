@@ -17,10 +17,11 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from folha.core.views import home
+from folha.core.views import home, upload_contra_cheque
 
 urlpatterns = [
     url(r'^$', home, name='home'),
+    url(r'^upload/$', upload_contra_cheque, name='upload_contra_cheque'),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),

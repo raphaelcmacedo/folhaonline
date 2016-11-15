@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{%  block content %}
+<section>
+    <div class="content row padding-bottom-3 desktop-12 container">
+        <h3>Upload de Contra Cheques</h3>
+        <div class="desktop-6">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert success">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form action="." method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="form-row label-block input-text">
+                    <label for="{{ form.orgao.id_for_label }}">{{ form.orgao.label }}</label>
+                    {{ form.orgao.errors }}
+                    {{ form.orgao }}
+                </div>
+                <div class="form-row label-block input-text">
+                    <label for="{{ form.formato.id_for_label }}">{{ form.formato.label }}</label>
+                    {{ form.formato.errors }}
+                    {{ form.formato }}
+                </div>
+                <div class="form-row label-block input-text">
+                    <label for="{{ form.file.id_for_label }}">{{ form.file.label }}</label>
+                    {{ form.file.errors }}
+                    {{ form.file }}
+                </div>
+
+                <p class="btn-row"><input type="submit" value="Enviar!"/></p>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}
