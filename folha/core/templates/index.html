@@ -22,8 +22,14 @@
 
     <section id="contra-cheques">
         <div class="contra-cheques text-align-center row desktop-8 padding-bottom-2 container">
-            <section class="contra-cheques-form">
-                {% render_table table %}
+            <section class="contra-cheques">
+                <div class="list-group">
+                    {% for contra_cheque in contra_cheques %}
+                         <a class="list-group-item" href="{{ contra_cheque.url }}"> {{ contra_cheque.mes_extenso }}</a>
+                    {% empty %}
+                        <p class="list-group-item">Selecione uma matrícula com contra cheques neste exercício.</p>
+                    {% endfor %}
+                </div>
             </section>
         </div>
 

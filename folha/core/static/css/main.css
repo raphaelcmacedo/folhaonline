@@ -241,26 +241,6 @@ section header h2 {
     padding-top: 0;
 }
 
-
-.tasks h2 {
-    font-family: "sinkin_sans600_semibold";
-    font-size: 25px;
-    line-height: 1em;
-    text-transform: uppercase;
-    min-height: 64px;
-    padding-top: 10px;
-    padding-bottom: 0;
-}
-
-.tasks p {
-    font-size: 16px;
-}
-
-.task{
-    margin: 6px;
-}
-
-
 .icon-delete{
     float: right;
     margin-top: 10px;
@@ -308,6 +288,11 @@ section header h2 {
     color: #3c763d;
     background-color: #dff0d8;
     boder-color:#d0e9c6;
+}
+
+.contra-cheque-item
+{
+    display: inline-block;
 }
 
 /* Fim Customização */
