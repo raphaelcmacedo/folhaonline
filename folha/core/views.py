@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from folha.core.forms import MatriculaListForm, ContraChequeUploadForm
 from folha.core.models import Matricula, ContraCheque
+from folha.core.services import upload_contra_cheque_file
 
 
 @login_required
@@ -36,9 +37,23 @@ def upload_contra_cheque(request):
     if request.method == 'POST':
         form = ContraChequeUploadForm(request.POST, request.FILES)
         files = request.FILES.getlist('file')
+
+        sucesses = []
+        failures = []
+
         if form.is_valid():
+
+            data = form.cleaned_data
+            formato = data['formato']
+            orgao = data['orgao']
+
             for f in files:
-                upload_contra_cheque(f)
+                try:
+                    contra_cheque = upload_contra_cheque_file(f, orgao, formato)
+                    sucesses.append('O arquivo {} foi importado com sucesso.').format(str(f))
+                except Exception as e:
+                    failures.append('O arquivo {} gerou o seguinte erro: {}'.format(str(f), str(e)))
+
             return HttpResponseRedirect('/success/url/')
     else:
         form = ContraChequeUploadForm()

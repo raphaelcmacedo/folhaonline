@@ -5,6 +5,11 @@ class MatriculaQuerySet(models.QuerySet):
     def matriculas_by_user(self, user):
         return self.filter(user = user).all()
 
+    def matriculas_by_numero(self, numero, orgao):
+        self.filter(numero=numero)
+        self.filter(orgao=orgao)
+        return self.first()
+
 class ContraChequeQuerySet(models.QuerySet):
 
     def contracheques_by_matricula(self, matricula, exercicio):
