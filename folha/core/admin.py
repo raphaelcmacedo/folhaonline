@@ -7,7 +7,7 @@ class MatriculaModelAdmin(admin.ModelAdmin):
     list_display = ['numero', 'orgao', 'user']
 
 class ContraChequeModelAdmin(admin.ModelAdmin):
-        list_display = ['matricula', 'mes', 'exercicio', 'url']
+        list_display = ['matricula', 'mes', 'exercicio']
 
 admin.site.register(Orgao)
 admin.site.register(Matricula, MatriculaModelAdmin)

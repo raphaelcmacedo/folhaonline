@@ -50,11 +50,11 @@ def upload_contra_cheque(request):
             for f in files:
                 try:
                     contra_cheque = upload_contra_cheque_file(f, orgao, formato)
-                    sucesses.append('O arquivo {} foi importado com sucesso.').format(str(f))
+                    sucesses.append('O arquivo {} foi importado com sucesso.'.format(str(f)))
                 except Exception as e:
                     failures.append('O arquivo {} gerou o seguinte erro: {}'.format(str(f), str(e)))
 
-            return HttpResponseRedirect('/success/url/')
+            return render(request, 'contra_cheque/success.html', {'sucesses': sucesses, 'failures': failures})
     else:
         form = ContraChequeUploadForm()
     return render(request, 'contra_cheque/upload.html', {'form': form})

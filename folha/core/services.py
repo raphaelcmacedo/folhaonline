@@ -7,6 +7,7 @@ from pdfminer.layout import LAParams, LTTextBox, LTTextLine
 from pdfminer.pdfparser import PDFPage, PDFParser, PDFDocument
 from io import StringIO
 
+from folha.core.google import insert_file
 from folha.core.models import ContraCheque, Matricula
 
 
@@ -14,6 +15,8 @@ def upload_contra_cheque_file(f, orgao, formato):
 
     if formato == 'SAPITUR':
         contra_cheque = read_sapitur(f, orgao)
+        file = insert_file(contra_cheque,f)
+        contra_cheque.save()
 
     else:
         raise ValidationError('Formato ' + formato + ' inesperado')
@@ -26,9 +29,8 @@ def read_sapitur(f, orgao):
     contra_cheque = ContraCheque()
 
     for i, line in enumerate(lines):
-        if i > 0 and str(lines[i - 1]).startswith(
-                'Mat'):  # Verifica se achou a matricula baseado no prefixo Mat da linha anterior
-            matricula = Matricula.objects.matriculas_by_numero(line, orgao)
+        if i > 0 and str(lines[i - 1]).startswith('Mat'):  # Verifica se achou a matricula baseado no prefixo Mat da linha anterior
+            contra_cheque.matricula = Matricula.objects.matriculas_by_numero(line, orgao)
             continue
 
         if ' / ' in line:  # Verifica se achou ano e mês baseado na regra MM / aaaa

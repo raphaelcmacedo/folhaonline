@@ -9,3 +9,4 @@ django_extensions==1.6.1
 django_test_without_migrations==0.4
 pytz
 pdfminer3k
+PyDrive

@@ -17,6 +17,12 @@ class ContraChequeQuerySet(models.QuerySet):
         self.filter(exercicio = exercicio)
         return self.all()
 
+    def contracheques_by_matricula_mes(self, matricula, mes, exercicio):
+        self.filter(matricula = matricula)
+        self.filter(mes=mes)
+        self.filter(exercicio = exercicio)
+        return self.all()
+
 
 MatriculaManager = models.Manager.from_queryset(MatriculaQuerySet)
 ContraChequeManager = models.Manager.from_queryset(ContraChequeQuerySet)
