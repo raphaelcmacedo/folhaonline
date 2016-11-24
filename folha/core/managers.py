@@ -6,22 +6,19 @@ class MatriculaQuerySet(models.QuerySet):
         return self.filter(user = user).all()
 
     def matriculas_by_numero(self, numero, orgao):
-        self.filter(numero=numero)
-        self.filter(orgao=orgao)
-        return self.first()
+        matricula = self.filter(numero=numero).filter(orgao=orgao).first()
+        if matricula is None:
+            raise ValueError('Não há cadastro da matrícula {} para o orgão {}.'.format(numero, orgao.sigla))
+        return matricula
 
 class ContraChequeQuerySet(models.QuerySet):
 
     def contracheques_by_matricula(self, matricula, exercicio):
-        self.filter(matricula = matricula)
-        self.filter(exercicio = exercicio)
-        return self.all()
+        return self.filter(matricula = matricula).filter(exercicio = exercicio).all()
 
     def contracheques_by_matricula_mes(self, matricula, mes, exercicio):
-        self.filter(matricula = matricula)
-        self.filter(mes=mes)
-        self.filter(exercicio = exercicio)
-        return self.first()
+        return self.filter(matricula = matricula).filter(mes=mes).filter(exercicio = exercicio).first()
+
 
 
 MatriculaManager = models.Manager.from_queryset(MatriculaQuerySet)
