@@ -21,13 +21,14 @@ def insert_file(contra_cheque, file, mime_type = 'application/pdf'):
     upload.SetContentFile(tmp)
     upload.Upload()
 
-    #Busca a url
-    url = upload['downloadUrl']
-    index = url.index('?')
-    if(index > 0):
-        url = url[:index]
+    #Adiciona permissões públicas ao arquivo
+    permission = upload.InsertPermission({
+        'type': 'anyone',
+        'value': 'anyone',
+        'role': 'reader'})
 
-    contra_cheque.url = url
+    #Seta a url pública
+    contra_cheque.url = upload['alternateLink']
 
 def _auth():
     gauth = GoogleAuth()

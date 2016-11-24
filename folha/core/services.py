@@ -1,11 +1,8 @@
-import PyPDF2
-import pdfminer
 from django.core.exceptions import ValidationError
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.converter import TextConverter, PDFPageAggregator
+from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LAParams, LTTextBox, LTTextLine
-from pdfminer.pdfparser import PDFPage, PDFParser, PDFDocument
-from io import StringIO
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfparser import PDFParser, PDFDocument
 
 from folha.core.google import insert_file
 from folha.core.models import ContraCheque, Matricula
@@ -15,6 +12,7 @@ def upload_contra_cheque_file(f, orgao, formato):
 
     if formato == 'SAPITUR':
         contra_cheque = read_sapitur(f, orgao)
+        validate(contra_cheque)
         file = insert_file(contra_cheque,f)
         contra_cheque.save()
 
@@ -22,6 +20,15 @@ def upload_contra_cheque_file(f, orgao, formato):
         raise ValidationError('Formato ' + formato + ' inesperado')
 
 
+def validate(contra_cheque):
+    if contra_cheque.matricula_id is None:
+        raise ValueError('Não foi possível localizar a matrícula neste arquivo. Verifique se este é um formato de contra cheque válido')
+
+    if contra_cheque.mes is None:
+        raise ValueError('Não foi possível localizar o mês neste arquivo. Verifique se este é um formato de contra cheque válido')
+
+    if contra_cheque.exercicio is None:
+        raise ValueError('Não foi possível localizar o exercício neste arquivo. Verifique se este é um formato de contra cheque válido')
 
 def read_sapitur(f, orgao):
     lines = convert_pdf_to_txt(f)
