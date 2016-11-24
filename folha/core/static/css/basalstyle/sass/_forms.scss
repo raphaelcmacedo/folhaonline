@@ -45,7 +45,7 @@
     display: block;
 }
 
-.input-text input {
+.input-text input:not([type=file]) {
     color: $basal-form-text-color;
     font-size: 2.0em;
     font-family: inherit;

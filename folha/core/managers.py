@@ -21,7 +21,7 @@ class ContraChequeQuerySet(models.QuerySet):
         self.filter(matricula = matricula)
         self.filter(mes=mes)
         self.filter(exercicio = exercicio)
-        return self.all()
+        return self.first()
 
 
 MatriculaManager = models.Manager.from_queryset(MatriculaQuerySet)

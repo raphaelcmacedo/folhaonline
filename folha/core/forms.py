@@ -16,6 +16,6 @@ class ContraChequeUploadForm(forms.Form):
           ('SAPITUR', 'Sapitur'),
      )
 
-     orgao = forms.ModelChoiceField(queryset=Orgao.objects.all())
+     orgao = forms.ModelChoiceField(label="Orgão",queryset=Orgao.objects.all())
      formato = forms.ChoiceField(choices)
-     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+     file = forms.FileField(label="Arquivo", widget=forms.ClearableFileInput(attrs={'multiple': True}))

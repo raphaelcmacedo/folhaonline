@@ -4,7 +4,7 @@ import tempfile
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
-def insert_file(contra_cheque, file, mime_type = 'application/pdf'):
+def insert_file(contra_cheque, file):
 
     drive = _auth()
 
@@ -16,7 +16,7 @@ def insert_file(contra_cheque, file, mime_type = 'application/pdf'):
 
     #Realiza o upload
     upload = drive.CreateFile()
-    file_name = '{}-{}-{}/{}.pdf'.format(contra_cheque.matricula.orgao.sigla, contra_cheque.matricula.numero, contra_cheque.mes, contra_cheque.exercicio)
+    file_name = get_file_name(contra_cheque)
     upload['title'] = file_name
     upload.SetContentFile(tmp)
     upload.Upload()
@@ -29,6 +29,14 @@ def insert_file(contra_cheque, file, mime_type = 'application/pdf'):
 
     #Seta a url pública
     contra_cheque.url = upload['alternateLink']
+
+def delete_file(contra_cheque):
+    drive = _auth()
+    query = r"'root' in parents and trashed=false and name = '{}' ".format(get_file_name(contra_cheque))
+    files = drive.ListFile({'q': query })
+    for file in files:
+        file.Trash()
+
 
 def _auth():
     gauth = GoogleAuth()
@@ -47,3 +55,6 @@ def _auth():
     gauth.SaveCredentialsFile("mycreds.txt")
 
     return GoogleDrive(gauth)
+
+def get_file_name(contra_cheque):
+    return '{}-{}-{}/{}.pdf'.format(contra_cheque.matricula.orgao.sigla, contra_cheque.matricula.numero, contra_cheque.mes, contra_cheque.exercicio)

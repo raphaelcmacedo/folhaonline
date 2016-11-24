@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.shortcuts import resolve_url
 
+from folha.core.google import delete_file
 from folha.core.managers import MatriculaManager, ContraChequeManager
 from folha.core.util import _createHash
 
@@ -47,6 +48,7 @@ class ContraCheque(models.Model):
         old = ContraCheque.objects.contracheques_by_matricula_mes(self.matricula, self.mes, self.exercicio)
         if old is not None:
             old.delete()
+            #delete_file(old)
 
         super(ContraCheque, self).save(*args, **kwargs)
 
