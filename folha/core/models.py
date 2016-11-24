@@ -1,3 +1,4 @@
+from django.contrib import auth
 from django.contrib.auth.models import User
 from django.db import models
 from django.shortcuts import resolve_url
@@ -72,3 +73,8 @@ class ContraCheque(models.Model):
 
         return meses[self.mes]
 
+
+def is_admin(self):
+    return self.groups.filter(name='admin').exists()
+
+User.add_to_class("is_admin",is_admin)
