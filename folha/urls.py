@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import password_reset, password_reset_done, password_reset_confirm, password_reset_complete
 
 from folha.core.views import home, upload_contra_cheque
 
@@ -25,4 +26,9 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
+
+    url(r'^user/password/reset/$', password_reset, {'post_reset_redirect' : '/user/password/reset/done/'},name="password_reset"),
+    url(r'^user/password/reset/done/$',password_reset_done),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', password_reset_confirm,name='password_reset_confirm'),
+    url(r'^user/password/done/$',password_reset_complete, name='password_reset_complete'),
 ]

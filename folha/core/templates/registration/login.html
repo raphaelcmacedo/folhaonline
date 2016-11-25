@@ -31,8 +31,12 @@
                                 {{ form.password }}
                             </div>
 
-
-                            <button type="submit" name="go" class="btn-basic">Entrar</button>
+                            <div class="form-row label-block input-text">
+                                <button type="submit" name="go" class="btn-basic">Entrar</button>
+                            </div>
+                            <div class="form-row label-block input-text">
+                                <a data-scroll href="{% url 'password_reset' %}">Esqueceu ou deseja alterar sua senha?</a>
+                            </div>
                         </div>
 
                     </form>
