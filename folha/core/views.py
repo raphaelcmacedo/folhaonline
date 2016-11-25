@@ -1,22 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template import loader
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
-from django.views.generic import *
-from django.contrib import messages
-from django.contrib.auth.models import User
-from django.db.models.query_utils import Q
+from django.urls import reverse
 
-
-from folha.core.forms import MatriculaListForm, ContraChequeUploadForm
+from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm
 from folha.core.models import Matricula, ContraCheque
 from folha.core.services import upload_contra_cheque_file
-from folha.settings import DEFAULT_FROM_EMAIL
 
 
 @login_required
@@ -70,3 +59,23 @@ def upload_contra_cheque(request):
     else:
         form = ContraChequeUploadForm()
     return render(request, 'contra_cheque/upload.html', {'form': form})
+
+def edit_user(request, user = None, template_name="registration/edit_user.html"):
+    if user is None:
+        user = request.user
+
+    if request.method == "POST":
+        form = UserForm(data=request.POST, instance=user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            url = reverse('home')
+            return HttpResponseRedirect(url)
+    else:
+        form = UserForm(instance=user)
+
+    context = {'form': form}
+    return render(request, template_name, context)
+
+
+

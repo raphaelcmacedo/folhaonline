@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+
+        <div class="row" id="pwd-container">
+
+            <div class="content row padding-bottom-3 desktop-12 container">
+                <section class="login-form">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert success">
+                                <p>{{ message }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="post">
+
+                        {% csrf_token %}
+                        <div class="desktop-6">
+                            {{ form.non_field_errors }}
+                            <div class="form-row label-block input-text">
+                                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                                {{ form.email.errors }}
+                                {{ form.email }}
+                            </div>
+
+                            <div class="form-row label-block input-text">
+                                <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                                {{ form.first_name.errors }}
+                                {{ form.first_name }}
+                            </div>
+
+                            <div class="form-row label-block input-text">
+                                <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                                {{ form.last_name.errors }}
+                                {{ form.last_name }}
+                            </div>
+
+                            <div class="form-row label-block input-text">
+                                <button type="submit" name="go" class="btn-basic">Atualizar</button>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </section>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

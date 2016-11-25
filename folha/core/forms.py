@@ -1,6 +1,7 @@
 import datetime
 
 from django import forms
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 from folha.core.models import Matricula, Orgao
@@ -19,3 +20,8 @@ class ContraChequeUploadForm(forms.Form):
      orgao = forms.ModelChoiceField(label="Orgão",queryset=Orgao.objects.all())
      formato = forms.ChoiceField(choices)
      file = forms.FileField(label="Arquivo", widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name']
