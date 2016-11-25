@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+
+    <section id="orgao">
+        <div class="orgao text-align-center row desktop-8 padding-bottom-2 container">
+            <section class="orgao-form">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <button type="submit" name="go" class="btn-basic">Buscar</button>
+
+                </form>
+            </section>
+        </div>
+
+    </section>
+    <div class="orgao text-align-center row desktop-8 padding-bottom-2 container">
+        {% render_table table %}
+    </div>
+
+{% endblock content %}

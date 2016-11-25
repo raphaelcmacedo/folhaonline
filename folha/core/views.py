@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm
+from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm
 from folha.core.models import Matricula, ContraCheque
 from folha.core.services import upload_contra_cheque_file
+from folha.core.tables import UserTable
 
 
 @login_required
@@ -60,9 +62,11 @@ def upload_contra_cheque(request):
         form = ContraChequeUploadForm()
     return render(request, 'contra_cheque/upload.html', {'form': form})
 
-def edit_user(request, user = None, template_name="registration/edit_user.html"):
-    if user is None:
+def edit_user(request, pk = None, template_name="registration/edit_user.html"):
+    if pk is None:
         user = request.user
+    else:
+        user = User.objects.all().filter(pk = pk).first()
 
     if request.method == "POST":
         form = UserForm(data=request.POST, instance=user)
@@ -77,5 +81,22 @@ def edit_user(request, user = None, template_name="registration/edit_user.html")
     context = {'form': form}
     return render(request, template_name, context)
 
+@login_required
+def list_user (request):
+    table = UserTable(User.objects.all())
+    if request.method == 'POST':
+        # Busca os dados fo form
+        form = UserListForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            orgao = data['orgao']
 
+        #contra_cheques = list(ContraCheque.objects.contracheques_by_matricula(matricula, exercicio))
+    else:
+        # Matrícula
+        form = UserListForm()
+
+    context = {'form': form, 'table':table}
+
+    return render(request, 'registration/list_user.html', context)
 

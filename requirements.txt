@@ -10,3 +10,4 @@ django_test_without_migrations==0.4
 pytz
 pdfminer3k
 PyDrive
+django_tables2

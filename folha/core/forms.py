@@ -25,3 +25,7 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email', 'first_name', 'last_name']
+
+
+class UserListForm(forms.Form):
+    orgao = forms.ModelChoiceField(label="Orgão", queryset=Orgao.objects.all())
