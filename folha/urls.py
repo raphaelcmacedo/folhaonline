@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^$', home, name='home'),
     url(r'^upload/$', upload_contra_cheque, name='upload_contra_cheque'),
     url(r'^login/$', auth_views.login, name='login'),
-    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^admin/', admin.site.urls),
 
     url(r'^user/password/reset/$', password_reset, {'post_reset_redirect' : '/user/password/reset/done/'},name="password_reset"),
