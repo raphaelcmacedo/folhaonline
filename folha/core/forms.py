@@ -29,3 +29,4 @@ class UserForm(forms.ModelForm):
 
 class UserListForm(forms.Form):
     orgao = forms.ModelChoiceField(label="Orgão", queryset=Orgao.objects.all())
+    username = forms.CharField(label="CNPJ", max_length=11, required=False, help_text='Insira somente os números')

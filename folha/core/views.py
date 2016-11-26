@@ -83,19 +83,26 @@ def edit_user(request, pk = None, template_name="registration/edit_user.html"):
 
 @login_required
 def list_user (request):
-    table = UserTable(User.objects.all())
+
+    qs = User.objects.none()
+
     if request.method == 'POST':
         # Busca os dados fo form
         form = UserListForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             orgao = data['orgao']
+            username = data['username']
+            ids = Matricula.objects.filter(orgao=orgao).values_list('id', flat=True)
+            qs = User.objects.filter(matricula__in=ids)
+            if(len(username) > 0):
+                qs = qs.filter(username=username)
 
-        #contra_cheques = list(ContraCheque.objects.contracheques_by_matricula(matricula, exercicio))
     else:
         # Matrícula
         form = UserListForm()
 
+    table = UserTable(qs)
     context = {'form': form, 'table':table}
 
     return render(request, 'registration/list_user.html', context)

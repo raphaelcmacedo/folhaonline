@@ -1,13 +1,16 @@
 import django_tables2 as tables
+from django.utils.safestring import mark_safe
 from django_tables2.utils import A
 from django.contrib.auth.models import User
 
 
 class UserTable(tables.Table):
-    edit = tables.LinkColumn('edit_user', args=[A('id')], orderable=False, text='Edit')
+    editar = tables.LinkColumn('edit_user', args=[A('id')], orderable=False, text=mark_safe('<i class="fa fa-pencil" aria-hidden="true"></i>'))
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'firstname', 'lastname')
+        orderable = False
+        fields = ('username', 'email', 'first_name', 'last_name')
         attrs = {"class": "paleblue"}
+        sequence = ('editar','username', 'email', 'first_name', 'last_name')
 
