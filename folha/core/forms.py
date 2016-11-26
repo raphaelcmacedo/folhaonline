@@ -13,12 +13,18 @@ class MatriculaListForm(forms.Form):
 
 
 class ContraChequeUploadForm(forms.Form):
-     choices =(
+     formato_choices =(
           ('SAPITUR', 'Sapitur'),
      )
 
+     action_choices = (
+         ('IMPORT', 'Importar contra cheque'),
+         ('REGISTER', 'Cadastrar usuários'),
+     )
+
      orgao = forms.ModelChoiceField(label="Orgão",queryset=Orgao.objects.all())
-     formato = forms.ChoiceField(choices)
+     formato = forms.ChoiceField(formato_choices)
+     action = forms.ChoiceField(action_choices, label="Ação")
      file = forms.FileField(label="Arquivo", widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
 class UserForm(forms.ModelForm):

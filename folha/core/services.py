@@ -1,4 +1,5 @@
-from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LAParams, LTTextBox, LTTextLine
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
@@ -11,16 +12,32 @@ from folha.core.models import ContraCheque, Matricula
 def upload_contra_cheque_file(f, orgao, formato):
 
     if formato == 'SAPITUR':
-        contra_cheque = read_sapitur(f, orgao)
-        validate(contra_cheque)
+        contra_cheque = read_contra_cheque_sapitur(f, orgao)
+        validate_contra_cheque(contra_cheque)
         file = insert_file(contra_cheque,f)
         contra_cheque.save()
 
     else:
         raise ValidationError('Formato ' + formato + ' inesperado')
 
+def register_matricula(f, orgao, formato):
 
-def validate(contra_cheque):
+    if formato == 'SAPITUR':
+        matricula = read_matricula_sapitur(f)
+        matricula.orgao = orgao
+
+    try: # Caso a matrícula já exista esse metódo não retornará erro e como nada foi added retornarmos None
+        Matricula.objects.matriculas_by_numero(matricula.numero, orgao)
+        return None
+    except:# Matrícula não existente, salva a nova matrícula e a retorna para ser added a lista
+        matricula.save()
+        return matricula
+
+    else:
+        raise ValidationError('Formato ' + formato + ' inesperado')
+
+
+def validate_contra_cheque(contra_cheque):
     if contra_cheque.matricula_id is None:
         raise ValueError('Não foi possível localizar a matrícula neste arquivo. Verifique se este é um formato de contra cheque válido')
 
@@ -30,7 +47,8 @@ def validate(contra_cheque):
     if contra_cheque.exercicio is None:
         raise ValueError('Não foi possível localizar o exercício neste arquivo. Verifique se este é um formato de contra cheque válido')
 
-def read_sapitur(f, orgao):
+
+def read_contra_cheque_sapitur(f, orgao):
     lines = convert_pdf_to_txt(f)
 
     contra_cheque = ContraCheque()
@@ -46,6 +64,35 @@ def read_sapitur(f, orgao):
             contra_cheque.exercicio = mesAno[1].strip()
 
     return contra_cheque
+
+def read_matricula_sapitur(f):
+    lines = convert_pdf_to_txt(f)
+
+    matricula = Matricula()
+
+    # Busca o número da matrícula
+    for i, line in enumerate(lines):
+        if i > 0 and str(lines[i - 1]).startswith('Mat'):  # Verifica se achou a matricula baseado no prefixo Mat da linha anterior
+            matricula.numero = line
+            break
+
+    # Busca o cpf pelo nome do arquivo
+    filename = str(f)
+    index = filename.index('-')
+    cpf = filename[:index].strip()
+
+    # Verifica se esse cpf já possui um usuário caso contrário cadastra
+    try:
+        user = User.objects.get(username=cpf)
+    except ObjectDoesNotExist:
+        user = User()
+        user.username = cpf
+        user.password = '123'
+        user.save()
+    matricula.user = user
+
+
+    return matricula
 
 
 def convert_pdf_to_txt(f):

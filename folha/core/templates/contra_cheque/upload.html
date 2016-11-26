@@ -27,6 +27,11 @@
                     {{ form.formato }}
                 </div>
                 <div class="form-row label-block input-text">
+                    <label for="{{ form.action.id_for_label }}">{{ form.action.label }}</label>
+                    {{ form.action.errors }}
+                    {{ form.action }}
+                </div>
+                <div class="form-row label-block input-text">
                     <label for="{{ form.file.id_for_label }}">{{ form.file.label }}</label>
                     {{ form.file.errors }}
                     {{ form.file }}

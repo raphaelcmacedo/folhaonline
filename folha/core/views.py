@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm
 from folha.core.models import Matricula, ContraCheque
-from folha.core.services import upload_contra_cheque_file
+from folha.core.services import upload_contra_cheque_file, register_matricula
 from folha.core.tables import UserTable
 
 
@@ -48,12 +48,19 @@ def upload_contra_cheque(request):
 
             data = form.cleaned_data
             formato = data['formato']
+            action = data['action']
             orgao = data['orgao']
 
             for f in files:
                 try:
-                    contra_cheque = upload_contra_cheque_file(f, orgao, formato)
-                    sucesses.append('O arquivo {} foi importado com sucesso.'.format(str(f)))
+                    if action == 'IMPORT':
+                        contra_cheque = upload_contra_cheque_file(f, orgao, formato)
+                        sucesses.append('O arquivo {} foi importado com sucesso.'.format(str(f)))
+                    elif action == 'REGISTER':
+                        matricula = register_matricula(f, orgao, formato)
+                        if matricula is not None:
+                            sucesses.append('A matrícula {} foi cadastrada pelo arquivo {}.'.format(str(matricula),str(f)))
+
                 except Exception as e:
                     failures.append('O arquivo {} gerou o seguinte erro: {}'.format(str(f), str(e)))
 
