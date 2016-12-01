@@ -55,7 +55,10 @@ def read_contra_cheque_sapitur(f, orgao):
 
     for i, line in enumerate(lines):
         if i > 0 and str(lines[i - 1]).startswith('Mat'):  # Verifica se achou a matricula baseado no prefixo Mat da linha anterior
+            if not line.isdigit():
+                raise ValueError('Matrícula não informada no arquivo.')
             contra_cheque.matricula = Matricula.objects.matriculas_by_numero(line, orgao)
+
             continue
 
         if ' / ' in line:  # Verifica se achou ano e mês baseado na regra MM / aaaa
@@ -74,6 +77,8 @@ def read_matricula_sapitur(f):
     for i, line in enumerate(lines):
         if i > 0 and str(lines[i - 1]).startswith('Mat'):  # Verifica se achou a matricula baseado no prefixo Mat da linha anterior
             matricula.numero = line
+            if not matricula.numero.isdigit():
+                raise ValueError('Matrícula não informada no arquivo.')
             break
 
     # Busca o cpf pelo nome do arquivo
@@ -87,7 +92,7 @@ def read_matricula_sapitur(f):
     except ObjectDoesNotExist:
         user = User()
         user.username = cpf
-        user.password = '123'
+        user.password = cpf
         user.save()
     matricula.user = user
 
