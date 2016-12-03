@@ -1,3 +1,4 @@
+import re
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from pdfminer.converter import PDFPageAggregator
@@ -7,6 +8,8 @@ from pdfminer.pdfparser import PDFParser, PDFDocument
 
 from folha.core.google import insert_file
 from folha.core.models import ContraCheque, Matricula
+
+REGEX_MATRICULA_SAPITUR = r'^\d+\s+\w+\s+\w+'
 
 
 def upload_contra_cheque_file(f, orgao, formato):
@@ -54,10 +57,9 @@ def read_contra_cheque_sapitur(f, orgao):
     contra_cheque = ContraCheque()
 
     for i, line in enumerate(lines):
-        if i > 0 and str(lines[i - 1]).startswith('Mat'):  # Verifica se achou a matricula baseado no prefixo Mat da linha anterior
-            if not line.isdigit():
-                raise ValueError('Matrícula não informada no arquivo.')
-            contra_cheque.matricula = Matricula.objects.matriculas_by_numero(line, orgao)
+        if re.search(REGEX_MATRICULA_SAPITUR, line):
+            parts = line.split(' ')
+            contra_cheque.matricula = Matricula.objects.matriculas_by_numero(parts[0], orgao)
 
             continue
 
@@ -74,12 +76,24 @@ def read_matricula_sapitur(f):
     matricula = Matricula()
 
     # Busca o número da matrícula
+
     for i, line in enumerate(lines):
-        if i > 0 and str(lines[i - 1]).startswith('Mat'):  # Verifica se achou a matricula baseado no prefixo Mat da linha anterior
-            matricula.numero = line
-            if not matricula.numero.isdigit():
-                raise ValueError('Matrícula não informada no arquivo.')
-            break
+
+        if re.search(REGEX_MATRICULA_SAPITUR, line):
+            parts = line.split(' ')
+            matricula.numero = ''
+            nome = ''
+            sobrenome = ''
+            for part in parts:
+                if len(part) > 0:#part possui valor
+                    if len(matricula.numero) <= 0:
+                        matricula.numero = part
+                    elif len(nome) <= 0:
+                        nome = part.title()
+                    else:
+                        sobrenome = sobrenome + ' ' + part.title()
+            sobrenome = sobrenome.strip()
+
 
     # Busca o cpf pelo nome do arquivo
     filename = str(f)
@@ -93,6 +107,8 @@ def read_matricula_sapitur(f):
         user = User()
         user.username = cpf
         user.password = cpf
+        user.first_name = nome
+        user.last_name = sobrenome
         user.save()
     matricula.user = user
 
