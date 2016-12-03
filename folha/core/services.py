@@ -97,7 +97,7 @@ def read_matricula_sapitur(f):
                         nome = part.title()
                     else:
                         sobrenome = sobrenome + ' ' + part.title()
-            sobrenome = sobrenome.strip()
+            sobrenome = sobrenome.strip()[:30]
 
 
     # Busca o cpf pelo nome do arquivo
