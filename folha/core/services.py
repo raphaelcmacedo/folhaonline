@@ -1,4 +1,6 @@
 import re
+
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from pdfminer.converter import PDFPageAggregator
@@ -12,12 +14,12 @@ from folha.core.models import ContraCheque, Matricula
 REGEX_MATRICULA_SAPITUR = r'^\d+\s+\w+\s+\w+'
 
 
-def upload_contra_cheque_file(f, orgao, formato):
+def upload_contra_cheque_file(f, orgao, formato, matriculas_dict):
 
     if formato == 'SAPITUR':
-        contra_cheque = read_contra_cheque_sapitur(f, orgao)
+        contra_cheque = read_contra_cheque_sapitur(f, matriculas_dict)
         validate_contra_cheque(contra_cheque)
-        file = insert_file(contra_cheque,f)
+        insert_file(contra_cheque,f)
         contra_cheque.save()
 
     else:
@@ -51,15 +53,18 @@ def validate_contra_cheque(contra_cheque):
         raise ValueError('Não foi possível localizar o exercício neste arquivo. Verifique se este é um formato de contra cheque válido')
 
 
-def read_contra_cheque_sapitur(f, orgao):
+def read_contra_cheque_sapitur(f, matriculas_dict):
     lines = convert_pdf_to_txt(f)
 
     contra_cheque = ContraCheque()
 
     for i, line in enumerate(lines):
         if re.search(REGEX_MATRICULA_SAPITUR, line):
-            parts = line.split(' ')
-            contra_cheque.matricula = Matricula.objects.matriculas_by_numero(parts[0], orgao)
+            key = line.split(' ')[0]
+            try:
+                contra_cheque.matricula = matriculas_dict[key]
+            except:
+                raise ValueError('Matrícula {} não cadastrada'.format(key))
 
             continue
 
@@ -106,7 +111,7 @@ def read_matricula_sapitur(f):
     except ObjectDoesNotExist:
         user = User()
         user.username = cpf
-        user.password = cpf
+        user.password = make_password(cpf)
         user.first_name = nome
         user.last_name = sobrenome
         user.save()

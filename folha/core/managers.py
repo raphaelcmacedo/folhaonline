@@ -11,6 +11,14 @@ class MatriculaQuerySet(models.QuerySet):
             raise ValueError('Não há cadastro da matrícula {} para o orgão {}.'.format(numero, orgao.sigla))
         return matricula
 
+    def matriculas_dict_by_orgao(self,orgao):
+        matriculas = self.filter(orgao=orgao)
+        matriculas_dict = {}
+        for matricula in matriculas:
+            matriculas_dict[matricula.numero] = matricula
+
+        return matriculas_dict
+
 class ContraChequeQuerySet(models.QuerySet):
 
     def contracheques_by_matricula(self, matricula, exercicio):

@@ -51,10 +51,12 @@ def upload_contra_cheque(request):
             action = data['action']
             orgao = data['orgao']
 
+            matriculas_dict = Matricula.objects.matriculas_dict_by_orgao(orgao)
+
             for f in files:
                 try:
                     if action == 'IMPORT':
-                        contra_cheque = upload_contra_cheque_file(f, orgao, formato)
+                        contra_cheque = upload_contra_cheque_file(f, orgao, formato, matriculas_dict)
                         sucesses.append('O arquivo {} foi importado com sucesso.'.format(str(f)))
                     elif action == 'REGISTER':
                         matricula = register_matricula(f, orgao, formato)
