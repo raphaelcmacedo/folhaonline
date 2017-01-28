@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.db.models import Q
 
 from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm
 from folha.core.models import Matricula, ContraCheque
@@ -96,16 +97,17 @@ def list_user (request):
     qs = User.objects.none()
 
     if request.method == 'POST':
-        # Busca os dados fo form
+        # Busca os dados do form
         form = UserListForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             orgao = data['orgao']
-            username = data['username']
+            search = data['search']
             ids = Matricula.objects.filter(orgao=orgao).values_list('id', flat=True)
-            qs = User.objects.filter(matricula__in=ids)
-            if(len(username) > 0):
-                qs = qs.filter(username=username)
+            qs = User.objects.filter(matricula__in=ids).distinct()
+            if(len(search) > 0):
+                for term in search.split():
+                    qs = qs.filter(Q(username=term) | Q(first_name__icontains=term) | Q(last_name__icontains=term))
 
     else:
         # Matrícula
