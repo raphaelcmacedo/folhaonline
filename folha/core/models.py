@@ -1,11 +1,9 @@
-from django.contrib import auth
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db import models
 from django.shortcuts import resolve_url
+from django.db.models import signals
 
-from folha.core.google import delete_file
 from folha.core.managers import MatriculaManager, ContraChequeManager
-from folha.core.util import _createHash
 
 
 class Orgao (models.Model):
@@ -73,8 +71,37 @@ class ContraCheque(models.Model):
 
         return meses[self.mes]
 
-
+#Customize user
 def is_admin(self):
     return self.groups.filter(name='admin').exists()
 
+def is_change_password(self):
+    return self.groups.filter(name='change_password').exists()
+
+def add_change_password(self):
+    group = Group.objects.get(name='change_password')
+    group.user_set.add(self)
+
+def remove_change_password(self):
+    group = Group.objects.get(name='change_password')
+    group.user_set.remove(self)
+
 User.add_to_class("is_admin",is_admin)
+User.add_to_class("is_change_password",is_change_password)
+User.add_to_class("add_change_password",add_change_password)
+User.add_to_class("remove_change_password",remove_change_password)
+
+def create_user_profile_signal(sender, instance, created, **kwargs):
+    if created:
+        instance.add_change_password();
+
+def password_change_signal(sender, instance, **kwargs):
+    try:
+        user = User.objects.get(username=instance.username)
+        if not user.password == instance.password:
+          instance.remove_change_password();
+    except User.DoesNotExist:
+        pass
+
+signals.pre_save.connect(password_change_signal, sender=User, dispatch_uid='accounts.models')
+signals.post_save.connect(create_user_profile_signal, sender=User, dispatch_uid='accounts.models')

@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.tokens import default_token_generator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.db.models import Q
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm
 from folha.core.models import Matricula, ContraCheque
@@ -13,6 +16,11 @@ from folha.core.tables import UserTable
 
 @login_required
 def home (request):
+    if request.user.is_change_password():
+        uidb64 = urlsafe_base64_encode(force_bytes(request.user.pk))
+        token = default_token_generator.make_token(request.user)
+        return HttpResponseRedirect(reverse('password_reset_confirm', kwargs={'uidb64':uidb64, 'token':token}))
+
     contra_cheques = []
 
     if request.method == 'POST':
