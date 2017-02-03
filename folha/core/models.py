@@ -3,7 +3,7 @@ from django.db import models
 from django.shortcuts import resolve_url
 from django.db.models import signals
 
-from folha.core.managers import MatriculaManager, ContraChequeManager
+from folha.core.managers import MatriculaManager, ContraChequeManager, GestorManager
 
 
 class Orgao (models.Model):
@@ -20,6 +20,17 @@ class Orgao (models.Model):
 
     def __str__(self):
         return self.sigla + ' ' + self.nome
+
+class Gestor (models.Model):
+    orgao = models.ForeignKey('Orgao')
+    user = models.ForeignKey(User)
+
+    objects = GestorManager()
+
+    def __str__(self):
+        return str(self.orgao) + ' - ' + self.user.first_name + ' - ' + self.user.last_name
+
+
 
 class Matricula (models.Model):
     numero = models.CharField('Número', max_length=100)

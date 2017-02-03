@@ -1,9 +1,13 @@
 from django.db import models
 
+
 class MatriculaQuerySet(models.QuerySet):
 
     def matriculas_by_user(self, user):
         return self.filter(user = user).all()
+
+    def matriculas_by_orgao(self, orgao):
+        return self.filter(orgao=orgao).all()
 
     def matriculas_by_numero(self, numero, orgao):
         matricula = self.filter(numero=numero).filter(orgao=orgao).first()
@@ -27,9 +31,15 @@ class ContraChequeQuerySet(models.QuerySet):
     def contracheques_by_matricula_mes(self, matricula, mes, exercicio):
         return self.filter(matricula = matricula).filter(mes=mes).filter(exercicio = exercicio).first()
 
+class GestorQuerySet(models.QuerySet):
+
+    def gestor_by_user(self, user):
+        return self.filter(user = user).all()
+
 
 
 MatriculaManager = models.Manager.from_queryset(MatriculaQuerySet)
 ContraChequeManager = models.Manager.from_queryset(ContraChequeQuerySet)
+GestorManager = models.Manager.from_queryset(GestorQuerySet)
 
 

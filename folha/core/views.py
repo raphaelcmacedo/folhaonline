@@ -9,7 +9,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 
 from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm
-from folha.core.models import Matricula, ContraCheque
+from folha.core.models import Matricula, ContraCheque, Gestor
 from folha.core.services import upload_contra_cheque_file, register_matricula
 from folha.core.tables import UserTable
 
@@ -24,7 +24,7 @@ def home (request):
     contra_cheques = []
 
     if request.method == 'POST':
-        # Busca os dados fo form
+        # Busca os dados do form
         form = MatriculaListForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
@@ -34,7 +34,15 @@ def home (request):
         contra_cheques = list(ContraCheque.objects.contracheques_by_matricula(matricula, exercicio))
     else:
         # Matrícula
-        matriculas = Matricula.objects.matriculas_by_user(request.user)
+        orgaosGestor = Gestor.objects.gestor_by_user(request.user)
+        matriculas = Matricula.objects.none()
+        # Verifica se o usuário é gestor de algum orgão (um ou mais), caso seja busca todas as matrículas desse orgão
+        if orgaosGestor:
+            for gestor in orgaosGestor:
+                matriculas = matriculas | Matricula.objects.matriculas_by_orgao(gestor.orgao)
+        else:
+            matriculas = Matricula.objects.matriculas_by_user(request.user)
+
         form = MatriculaListForm()
         form.fields["matricula"].queryset = matriculas
 
