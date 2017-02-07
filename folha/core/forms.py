@@ -15,6 +15,7 @@ class MatriculaListForm(forms.Form):
 class ContraChequeUploadForm(forms.Form):
      formato_choices =(
           ('SAPITUR', 'Sapitur'),
+          ('CAMBUCI', 'Cambuci'),
      )
 
      action_choices = (
