@@ -69,7 +69,7 @@ def read_matricula_sapitur(f):
     except ObjectDoesNotExist:
         user = User()
         user.username = cpf
-        user.password = make_password(cpf)
+        user.password = make_password(matricula.numero)
         user.first_name = nome
         user.last_name = sobrenome
         user.save()
