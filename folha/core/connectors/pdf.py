@@ -1,3 +1,4 @@
+import PyPDF2
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LAParams, LTTextBox, LTTextLine
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
@@ -27,3 +28,9 @@ def convert_pdf_to_txt(f):
                     lines.append(block)
 
     return lines
+
+def pdf_to_txt_pypdf(f):
+    read_pdf = PyPDF2.PdfFileReader(f)
+    page = read_pdf.getPage(0)
+    page_content = page.extractText()
+    return page_content.split('\n')

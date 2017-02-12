@@ -6,6 +6,9 @@ class MatriculaQuerySet(models.QuerySet):
     def matriculas_by_user(self, user):
         return self.filter(user = user).all()
 
+    def matriculas_by_cpf(self, cpf):
+        return self.filter(user__username = cpf).all()
+
     def matriculas_by_orgao(self, orgao):
         return self.filter(orgao=orgao).all()
 

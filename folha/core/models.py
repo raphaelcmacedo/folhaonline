@@ -65,7 +65,7 @@ class ContraCheque(models.Model):
 
     def mes_extenso(self):
         meses = {
-            0: '-',
+            0: 'Informe de Rendimentos',
             1: 'Janeiro',
             2: 'Fevereiro',
             3: 'Março',
