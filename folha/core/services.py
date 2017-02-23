@@ -49,13 +49,13 @@ def register_matricula(f, orgao, formato):
 
 def validate_contra_cheque(contra_cheque):
     if contra_cheque.matricula_id is None:
-        raise ValueError('Não foi possível localizar a matrícula neste arquivo. Verifique se este é um formato de contra cheque válido')
+        raise ValueError('Não foi possível localizar a matrícula neste arquivo. Verifique se este é um formato de contracheque válido')
 
     if contra_cheque.mes is None:
-        raise ValueError('Não foi possível localizar o mês neste arquivo. Verifique se este é um formato de contra cheque válido')
+        raise ValueError('Não foi possível localizar o mês neste arquivo. Verifique se este é um formato de contracheque válido')
 
     if contra_cheque.exercicio is None:
-        raise ValueError('Não foi possível localizar o exercício neste arquivo. Verifique se este é um formato de contra cheque válido')
+        raise ValueError('Não foi possível localizar o exercício neste arquivo. Verifique se este é um formato de contracheque válido')
 
 
 

@@ -1,7 +1,7 @@
 <header class="header header-inline min-h-3 row desktop-12 container" role="banner">
 
     <div class="site-logo">
-        <h1><a href="{% url 'home' %}" rel="home">Contra Cheque Online</a></h1>
+        <h1><a href="{% url 'home' %}" rel="home">Contracheque Online</a></h1>
         <p class="site-description screen-reader-only"><--Redigir texto --></p>
     </div>
 
@@ -11,7 +11,7 @@
             {% if user.is_authenticated %}
                 <li><a data-scroll href="{% url 'home' %}">Home</a></li>
                 {% if user.is_staff %}
-                <li><a data-scroll href="{% url 'upload_contra_cheque' %}">Upload Contra Cheque</a></li>
+                <li><a data-scroll href="{% url 'upload_contra_cheque' %}">Upload Contracheque</a></li>
                 {% endif %}
                 {% if user.is_admin %}
                 <li><a data-scroll href="{% url 'list_user' %}">Usuários</a></li>

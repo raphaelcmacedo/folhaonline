@@ -20,7 +20,7 @@ class ContraChequeUploadForm(forms.Form):
      )
 
      action_choices = (
-         ('IMPORT', 'Importar contra cheque'),
+         ('IMPORT', 'Importar contracheque'),
          ('REGISTER', 'Cadastrar usuários'),
      )
 
