@@ -7,9 +7,14 @@ from folha.core.managers import MatriculaManager, ContraChequeManager, GestorMan
 
 
 class Orgao (models.Model):
-    TRAJANO_DE_MORAES = '001'
+    BOM_JARDIM = 'BOM_JARDIM'
+    CAMBUCI = 'CAMBUCI'
+    TRAJANO_DE_MORAES = 'TRAJANO_DE_MORAES'
+
 
     MUNICIPIOS = (
+        (BOM_JARDIM, 'Bom Jardim'),
+        (CAMBUCI, 'Cambuci'),
         (TRAJANO_DE_MORAES, 'Trajano de Moraes'),
 
     )
