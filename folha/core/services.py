@@ -1,10 +1,56 @@
+from django.conf import settings
+from django.core import mail
 from django.core.exceptions import ValidationError
+from django.template.loader import render_to_string
 
 from folha.core.connectors.cambuci import read_matricula_cambuci, read_contra_cheque_cambuci
 from folha.core.connectors.dirf import read_informe_rendimento
 from folha.core.connectors.sapitur import read_contra_cheque_sapitur, read_matricula_sapitur
 from folha.core.google import insert_file
 from folha.core.models import Matricula
+
+
+def _send_email(email_to, sucesses, failures):
+    subject = 'Confirmação de inscrição'
+    message = render_to_string('contra_cheque/success_email.txt', {"sucesses":sucesses, "failures":failures})
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to = [email_to]
+    mail.send_mail(subject, message, from_email, to)
+
+def upload_contra_cheques_async(form, files, email_to):
+    result = upload_contra_cheques(form, files)
+    sucesses = result[0]
+    failures = result[1]
+    _send_email(email_to, sucesses, failures)
+
+def upload_contra_cheques(form, files):
+    sucesses = []
+    failures = []
+
+    if form.is_valid():
+
+        data = form.cleaned_data
+        formato = data['formato']
+        action = data['action']
+        orgao = data['orgao']
+
+        matriculas_dict = Matricula.objects.matriculas_dict_by_orgao(orgao)
+
+        for f in files:
+            try:
+                if action == 'IMPORT':
+                    contra_cheque = upload_contra_cheque_file(f, orgao, formato, matriculas_dict)
+                    sucesses.append('O arquivo {} foi importado com sucesso.'.format(str(f)))
+                elif action == 'REGISTER':
+                    matricula = register_matricula(f, orgao, formato)
+                    if matricula is not None:
+                        sucesses.append('A matrícula {} foi cadastrada pelo arquivo {}.'.format(str(matricula), str(f)))
+
+            except Exception as e:
+                failures.append('O arquivo {} gerou o seguinte erro: {}'.format(str(f), str(e)))
+
+    result = (sucesses, failures)
+    return result
 
 def upload_contra_cheque_file(f, orgao, formato, matriculas_dict):
 

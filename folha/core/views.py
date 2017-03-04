@@ -1,16 +1,19 @@
+from _thread import start_new_thread
+
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.db.models import Q
-from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm
 from folha.core.models import Matricula, ContraCheque, Gestor
-from folha.core.services import upload_contra_cheque_file, register_matricula
+from folha.core.services import upload_contra_cheques, \
+    upload_contra_cheques_async
 from folha.core.tables import UserTable
 
 
@@ -57,33 +60,23 @@ def upload_contra_cheque(request):
     if request.method == 'POST':
         form = ContraChequeUploadForm(request.POST, request.FILES)
         files = request.FILES.getlist('file')
+        background = False
 
-        sucesses = []
-        failures = []
+        if len(files) > 10:
+            background = True
+            sucesses = []
+            failures = []
+            email = request.user.email
+            if not email:
+                pass #TODO: Tratar falta de e-mail
 
-        if form.is_valid():
+            start_new_thread(upload_contra_cheques_async, (form, files,email,))
+        else:
+            result = upload_contra_cheques(form, files)
+            sucesses = result[0]
+            failures = result[1]
 
-            data = form.cleaned_data
-            formato = data['formato']
-            action = data['action']
-            orgao = data['orgao']
-
-            matriculas_dict = Matricula.objects.matriculas_dict_by_orgao(orgao)
-
-            for f in files:
-                try:
-                    if action == 'IMPORT':
-                        contra_cheque = upload_contra_cheque_file(f, orgao, formato, matriculas_dict)
-                        sucesses.append('O arquivo {} foi importado com sucesso.'.format(str(f)))
-                    elif action == 'REGISTER':
-                        matricula = register_matricula(f, orgao, formato)
-                        if matricula is not None:
-                            sucesses.append('A matrícula {} foi cadastrada pelo arquivo {}.'.format(str(matricula),str(f)))
-
-                except Exception as e:
-                    failures.append('O arquivo {} gerou o seguinte erro: {}'.format(str(f), str(e)))
-
-            return render(request, 'contra_cheque/success.html', {'sucesses': sucesses, 'failures': failures})
+        return render(request, 'contra_cheque/success.html', {'sucesses': sucesses, 'failures': failures, 'background': background})
     else:
         form = ContraChequeUploadForm()
     return render(request, 'contra_cheque/upload.html', {'form': form})
