@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
+from folha.core import util
 from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm
 from folha.core.models import Matricula, ContraCheque, Gestor
 from folha.core.services import upload_contra_cheques, \
@@ -62,6 +63,12 @@ def upload_contra_cheque(request):
         files = request.FILES.getlist('file')
         background = False
 
+        tempfiles = []
+        for f in files:
+            # Arquivo temporário
+            tmp = util.create_temp_file(f)
+            tempfiles.append(tmp)
+
         if len(files) > 10:
             background = True
             sucesses = []
@@ -70,9 +77,9 @@ def upload_contra_cheque(request):
             if not email:
                 pass #TODO: Tratar falta de e-mail
 
-            start_new_thread(upload_contra_cheques_async, (form, files,email,))
+            start_new_thread(upload_contra_cheques_async, (form, tempfiles,email,))
         else:
-            result = upload_contra_cheques(form, files)
+            result = upload_contra_cheques(form, tempfiles)
             sucesses = result[0]
             failures = result[1]
 

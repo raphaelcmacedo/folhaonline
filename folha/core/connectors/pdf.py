@@ -4,8 +4,12 @@ from pdfminer.layout import LAParams, LTTextBox, LTTextLine
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfparser import PDFParser, PDFDocument
 
-def convert_pdf_to_txt(f):
-    parser = PDFParser(f)
+def convert_pdf_to_txt(file):
+    if type(file) == dict:
+        infile = open(file["path"], 'rb')
+        parser = PDFParser(infile)
+    else:
+        parser = PDFParser(file)
     doc = PDFDocument()
     parser.set_document(doc)
     doc.set_parser(parser)

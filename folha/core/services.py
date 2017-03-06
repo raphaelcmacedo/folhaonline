@@ -40,14 +40,14 @@ def upload_contra_cheques(form, files):
             try:
                 if action == 'IMPORT':
                     contra_cheque = upload_contra_cheque_file(f, orgao, formato, matriculas_dict)
-                    sucesses.append('O arquivo {} foi importado com sucesso.'.format(str(f)))
+                    sucesses.append('O arquivo {} foi importado com sucesso.'.format(f["name"]))
                 elif action == 'REGISTER':
                     matricula = register_matricula(f, orgao, formato)
                     if matricula is not None:
-                        sucesses.append('A matrícula {} foi cadastrada pelo arquivo {}.'.format(str(matricula), str(f)))
+                        sucesses.append('A matrícula {} foi cadastrada pelo arquivo {}.'.format(str(matricula), f["name"]))
 
             except Exception as e:
-                failures.append('O arquivo {} gerou o seguinte erro: {}'.format(str(f), str(e)))
+                failures.append('O arquivo {} gerou o seguinte erro: {}'.format(f["name"], str(e)))
 
     result = (sucesses, failures)
     return result

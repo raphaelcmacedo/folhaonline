@@ -1,6 +1,3 @@
-import os
-import tempfile
-
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
@@ -11,17 +8,12 @@ def insert_file(contra_cheque, file):
     if drive is None:
         _auth()
 
-    #Arquivo temporário
-    fd, tmp = tempfile.mkstemp()
-    with os.fdopen(fd, 'wb+') as out:
-        for chunk in file.chunks():
-            out.write(chunk)
-
     #Realiza o upload
     upload = drive.CreateFile()
     file_name = get_file_name(contra_cheque)
     upload['title'] = file_name
-    upload.SetContentFile(tmp)
+    file_path = file["path"]
+    upload.SetContentFile(file_path)
     upload.Upload()
 
     #Adiciona permissões públicas ao arquivo
