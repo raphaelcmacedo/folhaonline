@@ -3,6 +3,7 @@ from _thread import start_new_thread
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -37,18 +38,19 @@ def home (request):
 
         contra_cheques = list(ContraCheque.objects.contracheques_by_matricula(matricula, exercicio))
     else:
-        # Matrícula
-        orgaosGestor = Gestor.objects.gestor_by_user(request.user)
-        matriculas = Matricula.objects.none()
-        # Verifica se o usuário é gestor de algum orgão (um ou mais), caso seja busca todas as matrículas desse orgão
-        if orgaosGestor:
-            for gestor in orgaosGestor:
-                matriculas = matriculas | Matricula.objects.matriculas_by_orgao(gestor.orgao)
-        else:
-            matriculas = Matricula.objects.matriculas_by_user(request.user)
-
         form = MatriculaListForm()
-        form.fields["matricula"].queryset = matriculas
+
+
+    # Matrícula
+    orgaosGestor = Gestor.objects.gestor_by_user(request.user)
+    matriculas = Matricula.objects.none()
+    # Verifica se o usuário é gestor de algum orgão (um ou mais), caso seja busca todas as matrículas desse orgão
+    if orgaosGestor:
+        for gestor in orgaosGestor:
+            matriculas = matriculas | Matricula.objects.matriculas_by_orgao(gestor.orgao)
+    else:
+        matriculas = Matricula.objects.matriculas_by_user(request.user)
+    form.fields["matricula"].queryset = matriculas
 
     context = {'form': form, 'contra_cheques':contra_cheques}
 
@@ -75,7 +77,7 @@ def upload_contra_cheque(request):
             failures = []
             email = request.user.email
             if not email:
-                pass #TODO: Tratar falta de e-mail
+                raise ValidationError("Este usuário não possui um e-mail cadastrado. Informe seu e-mail na seção 'Perfil' e depois tente novamente.")
 
             start_new_thread(upload_contra_cheques_async, (form, tempfiles,email,))
         else:
