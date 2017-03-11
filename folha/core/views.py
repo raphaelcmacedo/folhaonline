@@ -61,31 +61,32 @@ def home (request):
 @login_required
 def upload_contra_cheque(request):
     if request.method == 'POST':
-        form = ContraChequeUploadForm(request.POST, request.FILES)
-        files = request.FILES.getlist('file')
-        background = False
+        form = ContraChequeUploadForm(request.POST, request.FILES, request = request)
+        if form.is_valid():
+            files = request.FILES.getlist('file')
+            background = False
 
-        tempfiles = []
-        for f in files:
-            # Arquivo temporário
-            tmp = util.create_temp_file(f)
-            tempfiles.append(tmp)
+            tempfiles = []
+            for f in files:
+                # Arquivo temporário
+                tmp = util.create_temp_file(f)
+                tempfiles.append(tmp)
 
-        if len(files) > 10:
-            background = True
-            sucesses = []
-            failures = []
-            email = request.user.email
-            if not email:
-                raise ValidationError("Este usuário não possui um e-mail cadastrado. Informe seu e-mail na seção 'Perfil' e depois tente novamente.")
+            if len(files) > 10:
+                background = True
+                sucesses = []
+                failures = []
+                email = request.user.email
+                #if not email:
+                #    raise ValidationError("Este usuário não possui um e-mail cadastrado. Informe seu e-mail na seção 'Perfil' e depois tente novamente.")
 
-            start_new_thread(upload_contra_cheques_async, (form, tempfiles,email,))
-        else:
-            result = upload_contra_cheques(form, tempfiles)
-            sucesses = result[0]
-            failures = result[1]
+                start_new_thread(upload_contra_cheques_async, (form, tempfiles,email,))
+            else:
+                result = upload_contra_cheques(form, tempfiles)
+                sucesses = result[0]
+                failures = result[1]
+            return render(request, 'contra_cheque/success.html', {'sucesses': sucesses, 'failures': failures, 'background': background})
 
-        return render(request, 'contra_cheque/success.html', {'sucesses': sucesses, 'failures': failures, 'background': background})
     else:
         form = ContraChequeUploadForm()
     return render(request, 'contra_cheque/upload.html', {'form': form})

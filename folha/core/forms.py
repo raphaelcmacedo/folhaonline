@@ -29,6 +29,17 @@ class ContraChequeUploadForm(forms.Form):
      action = forms.ChoiceField(action_choices, label="Ação")
      file = forms.FileField(label="Arquivo", widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
+     def __init__(self, *args, **kwargs):
+         self.request = kwargs.pop('request', None)
+         super(ContraChequeUploadForm, self).__init__(*args, **kwargs)
+
+     def clean(self):
+         self.cleaned_data = super().clean()
+         email = self.request.user.email
+         if not email:
+             raise ValidationError(
+                 "Este usuário não possui um e-mail cadastrado. Informe seu e-mail na seção 'Perfil' e depois tente novamente.")
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = User

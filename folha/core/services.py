@@ -11,7 +11,7 @@ from folha.core.models import Matricula
 
 
 def _send_email(email_to, sucesses, failures):
-    subject = 'Confirmação de inscrição'
+    subject = 'Confirmação de processamento dos contracheques'
     message = render_to_string('contra_cheque/success_email.txt', {"sucesses":sucesses, "failures":failures})
     from_email = settings.DEFAULT_FROM_EMAIL
     to = [email_to]
