@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_encode
 
 from folha.core import util
 from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm, RegisterUserForm
-from folha.core.models import Matricula, ContraCheque, Gestor
+from folha.core.models import Matricula, ContraCheque, Gestor, Orgao
 from folha.core.services import upload_contra_cheques, \
     upload_contra_cheques_async
 from folha.core.tables import UserTable
@@ -117,6 +117,9 @@ def list_user (request):
 
     qs = User.objects.none()
 
+    orgaosGestorIds = Gestor.objects.gestor_by_user(request.user).values_list('orgao__id', flat=True)
+    orgaosQuerySet = Orgao.objects.filter(id__in=orgaosGestorIds)
+
     if request.method == 'POST':
         # Busca os dados do form
         form = UserListForm(request.POST)
@@ -135,6 +138,7 @@ def list_user (request):
         form = UserListForm()
 
     table = UserTable(qs)
+    form.fields["orgao"].queryset = orgaosQuerySet
     context = {'form': form, 'table':table}
 
     return render(request, 'registration/list_user.html', context)
