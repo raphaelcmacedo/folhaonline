@@ -16,22 +16,22 @@
             <form action="." method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.non_field_errors }}
-                <div class="form-row label-block input-text">
+                <div class="form-row label-block">
                     <label for="{{ form.orgao.id_for_label }}">{{ form.orgao.label }}</label>
                     {{ form.orgao.errors }}
                     {{ form.orgao }}
                 </div>
-                <div class="form-row label-block input-text">
+                <div class="form-row label-block">
                     <label for="{{ form.formato.id_for_label }}">{{ form.formato.label }}</label>
                     {{ form.formato.errors }}
                     {{ form.formato }}
                 </div>
-                <div class="form-row label-block input-text">
+                <div class="form-row label-block">
                     <label for="{{ form.action.id_for_label }}">{{ form.action.label }}</label>
                     {{ form.action.errors }}
                     {{ form.action }}
                 </div>
-                <div class="form-row label-block input-text">
+                <div class="form-row label-block">
                     <label for="{{ form.file.id_for_label }}">{{ form.file.label }}</label>
                     {{ form.file.errors }}
                     {{ form.file }}

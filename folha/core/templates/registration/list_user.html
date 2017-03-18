@@ -13,6 +13,9 @@
                     {{ form.as_p }}
 
                     <button type="submit" name="go" class="btn-basic">Buscar</button>
+                    {% if user.is_admin %}
+                    <a class="btn-basic" href="{% url 'register_user' %}">Novo</a>
+                    {% endif %}
 
                 </form>
             </section>

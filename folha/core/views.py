@@ -1,9 +1,11 @@
 from _thread import start_new_thread
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -12,7 +14,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 from folha.core import util
-from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm
+from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm, RegisterUserForm
 from folha.core.models import Matricula, ContraCheque, Gestor
 from folha.core.services import upload_contra_cheques, \
     upload_contra_cheques_async
@@ -137,3 +139,41 @@ def list_user (request):
 
     return render(request, 'registration/list_user.html', context)
 
+@transaction.atomic
+def register_user(request, template_name="registration/register_user.html"):
+    if request.method == "POST":
+        form = RegisterUserForm(data=request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            orgao = data['orgao']
+            cpf = data['cpf']
+            numero_matricula = data['matricula']
+            nome = data['nome']
+            sobrenome = data['sobrenome']
+            email = data['email']
+
+            # Verifica se esse cpf já possui um usuário caso contrário cadastra
+            try:
+                user = User.objects.get(username=cpf)
+            except ObjectDoesNotExist:
+                user = User()
+                user.username = cpf
+                user.password = make_password(numero_matricula)
+                user.first_name = nome
+                user.last_name = sobrenome
+                user.email = email
+                user.save()
+
+            matricula = Matricula()
+            matricula.user = user
+            matricula.orgao = orgao
+            matricula.numero = numero_matricula
+            matricula.save()
+
+            url = reverse('list_user')
+            return HttpResponseRedirect(url)
+    else:
+        form = RegisterUserForm()
+
+    context = {'form': form}
+    return render(request, template_name, context)

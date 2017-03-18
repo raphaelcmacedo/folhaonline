@@ -1,8 +1,10 @@
 import datetime
 
+import re
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from folha.core.models import Matricula, Orgao
 
@@ -56,3 +58,32 @@ class UserListForm(forms.Form):
     orgao = forms.ModelChoiceField(label="Orgão", queryset=Orgao.objects.all())
     search = forms.CharField(label="Filtro", max_length=100, required=False)
 
+class RegisterUserForm(forms.Form):
+    orgao = forms.ModelChoiceField(label="Orgão", queryset=Orgao.objects.all())
+    cpf = forms.CharField(11, label="CPF")
+    matricula = forms.CharField(11, label="Matrícula")
+    nome = forms.CharField(50, label = "Nome")
+    sobrenome = forms.CharField(50,label = "Sobrenome")
+    email = forms.EmailField(label="E-mail")
+
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+        cpf = re.sub('[\.-]', '', cpf)
+
+        return cpf
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        username = self.cleaned_data.get('cpf')
+        username = re.sub('[\.-]', '', username)
+
+        if User.objects.filter(email=email).exclude(username=username).count():
+            raise forms.ValidationError(u'Endereço de e-mail já utilizado para outro usuário')
+        return email
+
+    def clean_matricula(self):
+        numero = self.cleaned_data.get('matricula')
+        orgao = self.cleaned_data.get('orgao')
+        if Matricula.objects.filter(numero=numero).filter(orgao=orgao).count():
+            raise forms.ValidationError(u'Número de matrícula já utilizado para este orgão')
+        return numero

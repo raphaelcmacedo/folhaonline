@@ -10,10 +10,8 @@
         <ul>
             {% if user.is_authenticated %}
                 <li><a data-scroll href="{% url 'home' %}">Home</a></li>
-                {% if user.is_staff %}
-                <li><a data-scroll href="{% url 'upload_contra_cheque' %}">Upload Contracheque</a></li>
-                {% endif %}
                 {% if user.is_admin %}
+                <li><a data-scroll href="{% url 'upload_contra_cheque' %}">Upload Contracheque</a></li>
                 <li><a data-scroll href="{% url 'list_user' %}">Usuários</a></li>
                 {% endif %}
                 <li><a data-scroll href="{% url 'edit_user' %}">Perfil</a></li>

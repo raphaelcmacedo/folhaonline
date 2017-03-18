@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+
+        <div class="row" id="pwd-container">
+
+            <div class="content row padding-bottom-3 desktop-12 container">
+                <section class="login-form">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert success">
+                                <p>{{ message }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="post">
+
+                        {% csrf_token %}
+                        <div class="desktop-6">
+                            {{ form.non_field_errors }}
+
+                            <div class="form-row label-block input-text">
+                                <label for="{{ form.orgao.id_for_label }}">{{ form.orgao.label }}</label>
+                                {{ form.orgao.errors }}
+                                {{ form.orgao }}
+                            </div>
+
+                            <div class="form-row label-block input-text">
+                                <label for="{{ form.matricula.id_for_label }}">{{ form.matricula.label }}</label>
+                                {{ form.matricula.errors }}
+                                {{ form.matricula }}
+                            </div>
+
+
+                            <div class="form-row label-block input-text">
+                                <label for="{{ form.cpf.id_for_label }}">{{ form.cpf.label }}</label>
+                                {{ form.cpf.errors }}
+                                {{ form.cpf }}
+                            </div>
+
+                            <div class="form-row label-block input-text">
+                                <label for="{{ form.nome.id_for_label }}">{{ form.nome.label }}</label>
+                                {{ form.nome.errors }}
+                                {{ form.nome }}
+                            </div>
+
+                            <div class="form-row label-block input-text">
+                                <label for="{{ form.sobrenome.id_for_label }}">{{ form.sobrenome.label }}</label>
+                                {{ form.sobrenome.errors }}
+                                {{ form.sobrenome }}
+                            </div>
+
+                            <div class="form-row label-block input-text">
+                                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                                {{ form.email.errors }}
+                                {{ form.email }}
+                            </div>
+
+                            <div class="form-row label-block input-text">
+                                <button type="submit" name="go" class="btn-basic">Cadastrar</button>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </section>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
