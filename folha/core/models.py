@@ -89,7 +89,8 @@ class ContraCheque(models.Model):
 
 #Customize user
 def is_admin(self):
-    return self.groups.filter(name='admin').exists()
+    #return self.groups.filter(name='admin').exists()
+    return Gestor.objects.gestor_by_user(self)
 
 def is_change_password(self):
     return self.groups.filter(name='change_password').exists()
