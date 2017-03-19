@@ -129,7 +129,7 @@ def list_user (request):
             search = data['search']
             ids = Matricula.objects.filter(orgao=orgao).values_list('id', flat=True)
             qs = User.objects.filter(matricula__in=ids).distinct()
-            if(len(search) > 0):
+            if search:
                 for term in search.split():
                     qs = qs.filter(Q(username=term) | Q(first_name__icontains=term) | Q(last_name__icontains=term))
 
