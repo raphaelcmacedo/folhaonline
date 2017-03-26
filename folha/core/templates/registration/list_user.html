@@ -1,29 +1,42 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load render_table from django_tables2 %}
+{% load filters %}
 
 {% block content %}
 
 
-    <section id="orgao">
-        <div class="orgao text-align-center row desktop-8 padding-bottom-2 container">
-            <section class="orgao-form">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
+    <div class="container">
+        <div class="row">
 
-                    <button type="submit" name="go" class="btn-basic">Buscar</button>
-                    {% if user.is_admin %}
-                    <!--<a class="btn-basic" href="{% url 'register_user' %}">Novo</a>-->
-                    {% endif %}
+            <div class="user col-md-8 padding-bottom-50">
+                <form action="." method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+
+                    {% for field in form %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label for={{ field.id_for_label }}>{{ field.label }}</label>
+                                {{ field.errors }}
+                                {{ field|addcss:"form-control" }}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" name="go" class="btn btn-primary">Buscar</button>
+                    <a href="{% url 'register_user' %}" class="btn btn-primary">Novo</a>
 
                 </form>
-            </section>
+            </div>
+
         </div>
 
-    </section>
-    <div class="orgao text-align-center row desktop-8 padding-bottom-2 container">
-        {% render_table table %}
+        <div class="user col-md-8 padding-bottom-50">
+            {% render_table table %}
+        </div>
+
     </div>
+
 
 {% endblock content %}

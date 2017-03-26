@@ -1,13 +1,10 @@
-<header class="header header-inline min-h-3 row desktop-12 container" role="banner">
-
-    <div class="site-logo">
-        <h1><a href="{% url 'home' %}" rel="home">Contracheque Online</a></h1>
-        <p class="site-description screen-reader-only"><--Redigir texto --></p>
-    </div>
-
-    <nav class="nav-inline" role="navigation">
-        <a href="javascript:void(0);" class="nav-mobile"><i class="fa fa-bars"></i></a>
-        <ul>
+<nav class="navbar navbar-inverse bg-inverse">
+      <div class="container">
+      <div class="nav-header">
+          <a class="navbar-brand" href="#">Contracheque Online</a>
+      </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
                 <li><a data-scroll href="{% url 'home' %}">Home</a></li>
                 {% if user.is_admin %}
@@ -19,8 +16,12 @@
 
                 <li><p> Usuário: {{ user.username }}</p></li>
             {% endif %}
-
-        </ul>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
     </nav>
 
-</header>
+
+
+
+

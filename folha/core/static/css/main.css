@@ -1,165 +1,28 @@
 /* Customização */
 
-@font-face {
-    font-family: 'sinkin_sans200_x_light';
-    src: url('../fonts/SinkinSans-200XLight-webfont.eot');
-    src: url('../fonts/SinkinSans-200XLight-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/SinkinSans-200XLight-webfont.woff') format('woff'),
-         url('../fonts/SinkinSans-200XLight-webfont.ttf') format('truetype'),
-         url('../fonts/SinkinSans-200XLight-webfont.svg#sinkin_sans200_x_light') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
+.padding-bottom-10{
+    padding-bottom: 10px;
 }
 
-@font-face {
-    font-family: 'sinkin_sans300_light';
-    src: url('../fonts/SinkinSans-300Light-webfont.eot');
-    src: url('../fonts/SinkinSans-300Light-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/SinkinSans-300Light-webfont.woff') format('woff'),
-         url('../fonts/SinkinSans-300Light-webfont.ttf') format('truetype'),
-         url('../fonts/SinkinSans-300Light-webfont.svg#sinkin_sans300_light') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
+.padding-bottom-20{
+    padding-bottom: 20px;
 }
 
-@font-face {
-    font-family: 'sinkin_sans400_regular';
-    src: url('../fonts/SinkinSans-400Regular-webfont.eot');
-    src: url('../fonts/SinkinSans-400Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/SinkinSans-400Regular-webfont.woff') format('woff'),
-         url('../fonts/SinkinSans-400Regular-webfont.ttf') format('truetype'),
-         url('../fonts/SinkinSans-400Regular-webfont.svg#sinkin_sans400_regular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
+.padding-bottom-30{
+    padding-bottom: 30px;
 }
 
-@font-face {
-    font-family: 'sinkin_sans600_semibold';
-    src: url('../fonts/SinkinSans-600SemiBold-webfont.eot');
-    src: url('../fonts/SinkinSans-600SemiBold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/SinkinSans-600SemiBold-webfont.woff') format('woff'),
-         url('../fonts/SinkinSans-600SemiBold-webfont.ttf') format('truetype'),
-         url('../fonts/SinkinSans-600SemiBold-webfont.svg#sinkin_sans600_semibold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
+.padding-bottom-40{
+    padding-bottom: 40px;
 }
 
-@font-face {
-    font-family: 'sinkin_sans700_bold';
-    src: url('../fonts/SinkinSans-700Bold-webfont.eot');
-    src: url('../fonts/SinkinSans-700Bold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/SinkinSans-700Bold-webfont.woff') format('woff'),
-         url('../fonts/SinkinSans-700Bold-webfont.ttf') format('truetype'),
-         url('../fonts/SinkinSans-700Bold-webfont.svg#sinkin_sans700_bold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
+.padding-bottom-50{
+    padding-bottom: 50px;
 }
-
-body {
-    font-family: 'sinkin_sans300_light', serif;
-}
-
-/* Titulagem */
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'sinkin_sans600_semibold', serif;
-}
-
-h1 { padding: 10px 0 14px; }
-
-h2 { padding: 23px 0 7px; }
-
-h3 { padding: 27px 0 11px; }
-
-h4 { padding: 33px 0 23px; }
-
-h5 { padding: 6px 0 22px; }
-
-h6 { padding: 13px 0 4px; }
-
-h1, h2 {
-    letter-spacing: -0.006em;
-    word-spacing: -0.05em;
-}
-
-
-p, li, dt, dd, th, td, caption {
-    font-size: 1.5em;
-    line-height: 30px;
-}
-
-p, ul, ol, dl { padding: 7px 0 23px; }
-
-ul, ol {
-    padding-right: 0;
-    padding-left: 3.9em;
-}
-
-dl {
-    padding-right: 0;
-    padding-left: 2.4em;
-}
-
-.text-small h1,
-.text-small h2,
-.text-small h3,
-.text-small h4,
-.text-small h5,
-.text-small h6 {
-    padding: 3px 0 0;
-}
-
-.text-small p {
-    padding: 7px 0 17px;
-}
-
-.nav-inline li a {
-    font-size: 1.2em;
-    font-weight: 700;
-}
-
-.btn-basic,
-.btn-basic:visited,
-input[type="submit"] {
-    margin: 0.5em 0;
-}
-
-section header h2 {
-    color: #C5CDCD;
-    font-size: 20px;
-    padding: 15px 0 0 0;
-    min-height: 60px;
-    text-transform: uppercase;
-}
-
-
 
 /* Header */
 
-.header-frame  {
-    background-color: #3498db;
-}
-
-.header-frame-absolute {
-    padding: 30px 0;
-    width: 100%;
-    position: absolute;
-    z-index: 1000;
-    background-color: transparent;
-    transition: padding 1s, background-color 1s;
-}
-
-.header-frame-fixed {
-    padding: 0;
-    position: fixed;
-    background-color: #3498db;
-}
-
-.ogo h1 a {
+.logo h1 a {
     line-height: 200px;
     width: 131px;
     height: 55px;
@@ -226,28 +89,6 @@ section header h2 {
 
 }
 
-.countdown h1 {
-    font-family: "Economica";
-    font-size: 60px;
-    font-weight: 300;
-    line-height: 60px;
-    padding-top: 300px;
-}
-
-.countdown h3 {
-    font-family: "sinkin_sans600_semibold";
-    font-size: 25px;
-    font-weight: 400;
-    padding-top: 0;
-}
-
-.icon-delete{
-    float: right;
-    margin-top: 10px;
-    margin-right: 15px;
-    color: red;!important;
-    font-size: large;
-}
 
 #map-canvas {
     width: 100%;
@@ -312,52 +153,32 @@ section header h2 {
     boder-color:#d0e9c6;
 }
 
-.contra-cheque-item
-{
+.contra-cheque-item {
     display: inline-block;
 }
-.list-group {
-  padding-left: 0;
-  margin-bottom: 20px;
+
+
+.input-group {
+    /*background-color: rgb(50, 118, 177);
+    color: rgb(255, 255, 255);*/
+    border-color: rgb(40, 94, 142);
+    width: 100%;
 }
-.list-group-item {
-  position: relative;
-  display: block;
-  padding: 10px 15px;
-  margin-bottom: -1px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  font-family: Verdana,sans-serif !important;
-  font-size: 15px !important;
-  line-height: 1.5 !important;
+
+.form-control {
+    width: 100%;
 }
-.list-group-item:first-child {
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-}
-.list-group-item:last-child {
-  margin-bottom: 0;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-a.list-group-item,
-button.list-group-item {
-  color: #555;
-}
-a.list-group-item .list-group-item-heading,
-button.list-group-item .list-group-item-heading {
-  color: #333;
-}
-a.list-group-item:hover,
-button.list-group-item:hover,
-a.list-group-item:focus,
-button.list-group-item:focus {
-  color: #555;
-  text-decoration: none;
-  background-color: #f5f5f5;
+
+.form-control:focus
+{
+    background-color: rgb(50, 118, 177);
+    border-color: rgb(40, 94, 142);
+    color: rgb(255, 255, 255);
 }
 
 
-
+.btn{
+    width: 70px;
+}
 
 /* Fim Customização */

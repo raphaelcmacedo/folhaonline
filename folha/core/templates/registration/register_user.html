@@ -1,72 +1,28 @@
 {% extends 'base.html' %}
+{% load filters %}
 
 {% block content %}
     <div class="container">
+        <div class="row">
 
-        <div class="row" id="pwd-container">
+            <div class="user col-md-8 padding-bottom-50">
+                <form action="." method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
 
-            <div class="content row padding-bottom-3 desktop-12 container">
-                <section class="login-form">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert success">
-                                <p>{{ message }}</p>
+                    {% for field in form %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label for={{ field.id_for_label }}>{{ field.label }}</label>
+                                {{ field.errors }}
+                                {{ field|addcss:"form-control" }}
                             </div>
-                        {% endfor %}
-                    {% endif %}
-                    <form method="post">
-
-                        {% csrf_token %}
-                        <div class="desktop-6">
-                            {{ form.non_field_errors }}
-
-                            <div class="form-row label-block input-text">
-                                <label for="{{ form.orgao.id_for_label }}">{{ form.orgao.label }}</label>
-                                {{ form.orgao.errors }}
-                                {{ form.orgao }}
-                            </div>
-
-                            <div class="form-row label-block input-text">
-                                <label for="{{ form.matricula.id_for_label }}">{{ form.matricula.label }}</label>
-                                {{ form.matricula.errors }}
-                                {{ form.matricula }}
-                            </div>
-
-
-                            <div class="form-row label-block input-text">
-                                <label for="{{ form.cpf.id_for_label }}">{{ form.cpf.label }}</label>
-                                {{ form.cpf.errors }}
-                                {{ form.cpf }}
-                            </div>
-
-                            <div class="form-row label-block input-text">
-                                <label for="{{ form.nome.id_for_label }}">{{ form.nome.label }}</label>
-                                {{ form.nome.errors }}
-                                {{ form.nome }}
-                            </div>
-
-                            <div class="form-row label-block input-text">
-                                <label for="{{ form.sobrenome.id_for_label }}">{{ form.sobrenome.label }}</label>
-                                {{ form.sobrenome.errors }}
-                                {{ form.sobrenome }}
-                            </div>
-
-                            <div class="form-row label-block input-text">
-                                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-                                {{ form.email.errors }}
-                                {{ form.email }}
-                            </div>
-
-                            <div class="form-row label-block input-text">
-                                <button type="submit" name="go" class="btn-basic">Cadastrar</button>
-                            </div>
-
                         </div>
+                    {% endfor %}
 
-                    </form>
-                </section>
+                    <button type="submit" name="go" class="btn btn-primary">Enviar</button>
+                </form>
             </div>
 
         </div>
-    </div>
 {% endblock %}

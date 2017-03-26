@@ -1,48 +1,58 @@
 {% extends 'base.html' %}
+{% load filters %}
 
 {% block content %}
     <div class="container">
+         <div class="row">
 
-        <div class="row" id="pwd-container">
 
-            <div class="login text-align-center row desktop-8 padding-bottom-2 container">
-                <section class="login-form">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert success">
-                                <p>{{ message }}</p>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    <form method="post">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h5 class="text-center">
+                            LOGIN</h5>
 
-                        {% csrf_token %}
-                        <div class="desktop-6">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert success">
+                                    <p>{{ message }}</p>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form class="form form-signup" role="form" method="post">
+                            {% csrf_token %}
                             {{ form.non_field_errors }}
-                            <div class="form-row label-block input-text">
-                                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-                                {{ form.username.errors }}
-                                {{ form.username }}
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                    {{ form.username.errors }}
+                                    {{ form.username|addcss:"form-control" }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                    {{ form.password.errors }}
+                                    {{ form.password|addcss:"form-control"}}
+                                </div>
                             </div>
 
                             <div class="form-row label-block input-text">
-                                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-                                {{ form.password.errors }}
-                                {{ form.password }}
-                            </div>
-
-                            <div class="form-row label-block input-text">
-                                <button type="submit" name="go" class="btn-basic">Entrar</button>
+                                <button type="submit" name="go" class="btn btn-primary btn-block">Entrar</button>
                             </div>
                             <div class="form-row label-block input-text">
                                 <a data-scroll href="{% url 'password_reset' %}">Esqueceu ou deseja alterar sua senha?</a>
                             </div>
-                        </div>
-
                     </form>
-                </section>
+                </div>
             </div>
-
-        </div>
+         </div>
     </div>
+</div>
+
+
+
+
+
 {% endblock %}
