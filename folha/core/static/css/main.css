@@ -169,13 +169,14 @@
     width: 100%;
 }
 
+/*
 .form-control:focus
 {
     background-color: rgb(50, 118, 177);
     border-color: rgb(40, 94, 142);
     color: rgb(255, 255, 255);
 }
-
+*/
 
 .btn{
     width: 70px;
