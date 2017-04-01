@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load filters %}
+{% load static %}
 
 {% block content %}
+    <script src="{% static 'js/login.js' %}"></script>
     <div class="container">
          <div class="row">
 
@@ -10,7 +12,9 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h5 class="text-center">
-                            LOGIN</h5>
+                            <img style="max-width:50px; margin-bottom: 50px"
+                                src="{% static 'img/logo.png' %}">
+                        </h5>
 
                         {% if messages %}
                             {% for message in messages %}
@@ -20,7 +24,7 @@
                             {% endfor %}
                         {% endif %}
 
-                        <form class="form form-signup" role="form" method="post">
+                        <form id="loginForm" class="form form-signup" role="form" method="post">
                             {% csrf_token %}
                             {{ form.non_field_errors }}
                             <div class="form-group">
