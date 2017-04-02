@@ -50,7 +50,7 @@ class UserForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         username = self.cleaned_data.get('username')
-        if email and User.objects.filter(email=email).exclude(username=username).count():
+        if email and username and User.objects.filter(email=email).exclude(username=username).count():
             raise forms.ValidationError(u'Endereço de e-mail já utilizado para outro usuário')
         return email
 
