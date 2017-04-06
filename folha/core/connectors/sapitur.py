@@ -59,7 +59,10 @@ def read_matricula_sapitur(f):
 
 
     # Busca o cpf pelo nome do arquivo
-    filename = str(f)
+    try:
+        filename = f['name']
+    except:
+        filename = str(f)
     index = filename.index('-')
     cpf = filename[:index].strip()
 
