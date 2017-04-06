@@ -62,8 +62,18 @@ def home (request):
 
 @login_required
 def upload_contra_cheque(request):
+    # Matrícula
+    orgaosGestor = Gestor.objects.gestor_by_user(request.user)
+    orgaos = Orgao.objects.none()
+    # Verifica se o usuário é gestor de algum orgão (um ou mais), caso seja busca todas as matrículas desse orgão
+    if orgaosGestor:
+        for gestor in orgaosGestor:
+            orgaos = orgaos | Orgao.objects.filter(id = gestor.orgao.id)
+
     if request.method == 'POST':
         form = ContraChequeUploadForm(request.POST, request.FILES, request = request)
+        form.fields["orgao"].queryset = orgaos
+
         if form.is_valid():
             files = request.FILES.getlist('file')
             background = False
@@ -91,6 +101,7 @@ def upload_contra_cheque(request):
 
     else:
         form = ContraChequeUploadForm()
+        form.fields["orgao"].queryset = orgaos
     return render(request, 'contra_cheque/upload.html', {'form': form})
 
 def edit_user(request, pk = None, template_name="registration/edit_user.html"):
