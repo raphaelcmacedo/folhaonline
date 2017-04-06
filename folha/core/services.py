@@ -43,7 +43,7 @@ def upload_contra_cheques(form, files):
                     sucesses.append('O arquivo {} foi importado com sucesso.'.format(f["name"]))
                 elif action == 'REGISTER':
                     matricula = register_matricula(f, orgao, formato)
-                    if matricula is not None:
+                    if matricula:
                         sucesses.append('A matrícula {} foi cadastrada pelo arquivo {}.'.format(str(matricula), f["name"]))
 
             except Exception as e:
