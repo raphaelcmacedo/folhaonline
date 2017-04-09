@@ -62,7 +62,7 @@ class Matricula (models.Model):
 
 
     def __str__(self):
-        return self.numero + ' - ' + str(self.orgao)
+        return '{} {} - {} ({})'.format(self.user.first_name, self.user.last_name, self.numero, self.orgao.sigla )
 
     def get_absolute_url(self):
         return resolve_url('matricula_detail',self.pk)
