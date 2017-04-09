@@ -23,6 +23,12 @@ class Orgao (models.Model):
     nome = models.CharField('Nome', max_length=100)
     municipio = models.CharField('Município', max_length=100, choices=MUNICIPIOS)
 
+    class Meta:
+        verbose_name = 'orgão'
+        verbose_name_plural = 'orgãos'
+        ordering = ('sigla',)
+
+
     def __str__(self):
         return self.sigla + ' ' + self.nome
 
@@ -31,6 +37,11 @@ class Gestor (models.Model):
     user = models.ForeignKey(User)
 
     objects = GestorManager()
+
+    class Meta:
+        verbose_name = 'gestor'
+        verbose_name_plural = 'gestores'
+
 
     def __str__(self):
         return str(self.orgao) + ' - ' + self.user.first_name + ' - ' + self.user.last_name
@@ -43,6 +54,12 @@ class Matricula (models.Model):
     user = models.ForeignKey(User)
 
     objects = MatriculaManager()
+
+    class Meta:
+        verbose_name = 'matrícula'
+        verbose_name_plural = 'matrículas'
+        ordering = ('numero',)
+
 
     def __str__(self):
         return self.numero + ' - ' + str(self.orgao)
@@ -58,6 +75,11 @@ class ContraCheque(models.Model):
     url = models.URLField()
 
     objects = ContraChequeManager()
+
+    class Meta:
+        verbose_name = 'contra cheque'
+        verbose_name_plural = 'contra cheques'
+
 
     def save(self, *args, **kwargs):
         old = ContraCheque.objects.contracheques_by_matricula_mes(self.matricula, self.mes, self.exercicio)
