@@ -35,6 +35,7 @@ class Orgao (models.Model):
 class Gestor (models.Model):
     orgao = models.ForeignKey('Orgao')
     user = models.ForeignKey(User)
+    alterarSenhaUsuarios = models.BooleanField('Alterar Senha de Outros Usuários', default=False)
 
     objects = GestorManager()
 

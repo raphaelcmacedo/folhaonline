@@ -172,6 +172,10 @@ def list_user (request):
         form = UserListForm()
 
     table = UserTable(qs)
+
+    if not Gestor.objects.gestor_can_change_password(request.user):
+        table.exclude = ('senha',)
+
     form.fields["orgao"].queryset = orgaosQuerySet
     context = {'form': form, 'table':table}
 

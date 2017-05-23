@@ -39,7 +39,8 @@ class GestorQuerySet(models.QuerySet):
     def gestor_by_user(self, user):
         return self.filter(user = user).all()
 
-
+    def gestor_can_change_password(self, user):
+        return self.filter(user=user).filter(alterarSenhaUsuarios=True).all().count() > 0
 
 MatriculaManager = models.Manager.from_queryset(MatriculaQuerySet)
 ContraChequeManager = models.Manager.from_queryset(ContraChequeQuerySet)
