@@ -2,6 +2,8 @@ import datetime
 
 import re
 from django import forms
+from django.contrib.auth import password_validation
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -53,6 +55,10 @@ class UserForm(forms.ModelForm):
         if email and username and User.objects.filter(email=email).exclude(username=username).count():
             raise forms.ValidationError(u'Endereço de e-mail já utilizado para outro usuário')
         return email
+
+class ChangePasswordForm(SetPasswordForm):
+    pass
+    
 
 class UserListForm(forms.Form):
     orgao = forms.ModelChoiceField(label="Orgão", queryset=Orgao.objects.all())

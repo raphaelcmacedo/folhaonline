@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import password_reset, password_reset_done, password_reset_confirm, password_reset_complete
 
-from folha.core.views import home, upload_contra_cheque, edit_user, list_user, register_user
+from folha.core.views import home, upload_contra_cheque, edit_user, list_user, register_user, change_password
 
 urlpatterns = [
     url(r'^$', home, name='home'),
@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^edit_user/(?P<pk>\d+)/$', edit_user, name='edit_user'),
     url(r'^list_user/$', list_user, name='list_user'),
     url(r'^register_user/$', register_user, name='register_user'),
+    url(r'^change_password/(?P<pk>\d+)/$', change_password, name='change_password'),
 
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),

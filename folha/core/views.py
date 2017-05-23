@@ -14,12 +14,15 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 from folha.core import util
-from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm, RegisterUserForm
+from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm, RegisterUserForm, \
+    ChangePasswordForm
 from folha.core.models import Matricula, ContraCheque, Gestor, Orgao
 from folha.core.services import upload_contra_cheques, \
     upload_contra_cheques_async
 from folha.core.tables import UserTable
-
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import render, redirect
 
 @login_required
 def home (request):
@@ -123,6 +126,26 @@ def edit_user(request, pk = None, template_name="registration/edit_user.html"):
     context = {'form': form}
     return render(request, template_name, context)
 
+def change_password(request, pk = None, template_name="registration/password_user.html"):
+    if pk is None:
+        user = request.user
+    else:
+        user = User.objects.all().filter(pk = pk).first()
+
+    if request.method == "POST":
+        form = ChangePasswordForm(data=request.POST, user=user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            url = reverse('home')
+            return HttpResponseRedirect(url)
+    else:
+        form = ChangePasswordForm(user=user)
+
+    context = {'form': form}
+    return render(request, template_name, context)
+
+
 @login_required
 def list_user (request):
 
@@ -192,3 +215,4 @@ def register_user(request, template_name="registration/register_user.html"):
 
     context = {'form': form}
     return render(request, template_name, context)
+
