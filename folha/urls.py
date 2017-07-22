@@ -18,11 +18,12 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import password_reset, password_reset_done, password_reset_confirm, password_reset_complete
 
-from folha.core.views import home, upload_contra_cheque, edit_user, list_user, register_user, change_password
+from folha.core.views import home, upload_contra_cheque, edit_user, list_user, register_user, change_password, check_upload
 
 urlpatterns = [
     url(r'^$', home, name='home'),
     url(r'^upload/$', upload_contra_cheque, name='upload_contra_cheque'),
+    url(r'^check_upload/$', check_upload, name='check_upload'),
 
     url(r'^edit_user/$', edit_user, name='edit_user'),
     url(r'^edit_user/(?P<pk>\d+)/$', edit_user, name='edit_user'),

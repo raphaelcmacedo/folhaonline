@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load render_table from django_tables2 %}
 {% load filters %}
 
-{%  block content %}
+{% block content %}
+
 
     <div class="container">
-         <div class="row">
+        <div class="row">
 
-             <div class="matriculas col-md-8 padding-bottom-50">
+            <div class="user col-md-8 padding-bottom-50">
                 <div class="well bs-component">
                     <form action="." method="post" enctype="multipart/form-data">
                         <fieldset>
-                            <legend>Upload</legend>
+                            <legend>Usuários</legend>
                             {% csrf_token %}
                             {{ form.non_field_errors }}
 
@@ -20,25 +22,24 @@
                                     <div class="input-group">
                                         <label for={{ field.id_for_label }}>{{ field.label }}</label>
                                         {{ field.errors }}
-                                        {% if field.label == "Arquivo" %}
-                                            {{ field }}
-                                        {% else %}
-                                            {{ field|addcss:"form-control" }}
-                                        {% endif %}
-
+                                        {{ field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             {% endfor %}
 
-
-                            <button type="submit" name="go" class="btn btn-primary">Enviar</button>
-                            <a href="{% url 'check_upload' %}" class="btn btn-primary">Check</a>
+                            <button type="submit" name="go" class="btn btn-primary">Buscar</button>
                         </fieldset>
-
                     </form>
                 </div>
             </div>
 
         </div>
+
+        <div class="user col-md-8 padding-bottom-50">
+            {% render_table table %}
+        </div>
+
     </div>
+
+
 {% endblock content %}

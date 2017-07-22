@@ -93,3 +93,23 @@ class RegisterUserForm(forms.Form):
         if Matricula.objects.filter(numero=numero).filter(orgao=orgao).count():
             raise forms.ValidationError(u'Número de matrícula já utilizado para este orgão')
         return numero
+
+class CheckUploadForm(forms.Form):
+    mes_choices = (
+        (1, 'Janeiro'),
+        (2, 'Fevereiro'),
+        (3, 'Março'),
+        (4, 'Abril'),
+        (5, 'Maio'),
+        (6, 'Junho'),
+        (7, 'Julho'),
+        (8, 'Agosto'),
+        (9, 'Setembro'),
+        (10, 'Outubro'),
+        (11, 'Novembro'),
+        (12, 'Dezembro'),
+    )
+
+    orgao = forms.ModelChoiceField(label="Orgão", queryset=Orgao.objects.all())
+    exercicio = forms.IntegerField(initial=datetime.datetime.now().year)
+    mes = forms.ChoiceField(mes_choices)

@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_encode
 
 from folha.core import util
 from folha.core.forms import MatriculaListForm, ContraChequeUploadForm, UserForm, UserListForm, RegisterUserForm, \
-    ChangePasswordForm
+    ChangePasswordForm, CheckUploadForm
 from folha.core.models import Matricula, ContraCheque, Gestor, Orgao
 from folha.core.services import upload_contra_cheques, \
     upload_contra_cheques_async
@@ -220,3 +220,36 @@ def register_user(request, template_name="registration/register_user.html"):
     context = {'form': form}
     return render(request, template_name, context)
 
+@login_required
+def check_upload (request):
+
+    qs = User.objects.none()
+
+    orgaosGestorIds = Gestor.objects.gestor_by_user(request.user).values_list('orgao__id', flat=True)
+    orgaosQuerySet = Orgao.objects.filter(id__in=orgaosGestorIds)
+
+    if request.method == 'POST':
+        # Busca os dados do form
+        form = CheckUploadForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            orgao = data['orgao']
+            exercicio = data['exercicio']
+            mes = data['mes']
+
+            idsMatriculaOrgao = Matricula.objects.filter(orgao=orgao).values_list('id', flat=True)
+            idsMatriculaContracheque = ContraCheque.objects.filter(matricula__orgao=orgao).filter(mes=mes).filter(exercicio=exercicio).values_list('matricula_id', flat=True)
+            qs = User.objects.filter(matricula__in=idsMatriculaOrgao).exclude(matricula__in=idsMatriculaContracheque).distinct()
+
+
+    else:
+        # Matrícula
+        form = CheckUploadForm()
+
+    table = UserTable(qs)
+    table.exclude = ('senha',)
+
+    form.fields["orgao"].queryset = orgaosQuerySet
+    context = {'form': form, 'table':table}
+
+    return render(request, 'contra_cheque/check_upload.html', context)
