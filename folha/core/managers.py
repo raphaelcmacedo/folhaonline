@@ -29,7 +29,7 @@ class MatriculaQuerySet(models.QuerySet):
 class ContraChequeQuerySet(models.QuerySet):
 
     def contracheques_by_matricula(self, matricula, exercicio):
-        return self.filter(matricula = matricula).filter(exercicio = exercicio).all()
+        return self.filter(matricula = matricula).filter(exercicio = exercicio).all().order_by('exercicio', 'mes')
 
     def contracheques_by_matricula_mes(self, matricula, mes, exercicio):
         return self.filter(matricula = matricula).filter(mes=mes).filter(exercicio = exercicio).first()
