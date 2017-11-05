@@ -10,7 +10,7 @@ class MatriculaQuerySet(models.QuerySet):
         return self.filter(user__username = cpf).all()
 
     def matriculas_by_orgao(self, orgao):
-        return self.filter(orgao=orgao).all()
+        return self.filter(orgao=orgao).all().order_by("user__first_name")
 
     def matriculas_by_numero(self, numero, orgao):
         matricula = self.filter(numero=numero).filter(orgao=orgao).first()
