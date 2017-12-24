@@ -111,8 +111,10 @@ class ContraCheque(models.Model):
 
         result = meses[self.mes]
 
-        if(self.decimoTerceiro):
+        if self.decimoTerceiro:
             result = result + ' - parcela de décimo terceiro'
+
+        return result
 
 #Customize user
 def is_admin(self):
