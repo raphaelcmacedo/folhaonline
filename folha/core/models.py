@@ -74,6 +74,7 @@ class ContraCheque(models.Model):
     exercicio = models.IntegerField('Exercício')
     mes = models.IntegerField('Mês')
     url = models.URLField()
+    decimoTerceiro = models.NullBooleanField('Décimo Terceiro')
 
     objects = ContraChequeManager()
 
@@ -108,7 +109,10 @@ class ContraCheque(models.Model):
             12: 'Dezembro',
         }
 
-        return meses[self.mes]
+        result = meses[self.mes]
+
+        if(self.decimoTerceiro):
+            result = result + ' - parcela de décimo terceiro'
 
 #Customize user
 def is_admin(self):

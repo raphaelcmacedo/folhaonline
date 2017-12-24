@@ -12,7 +12,7 @@ class MatriculaModelAdmin(admin.ModelAdmin):
     search_fields = ('numero', 'orgao__sigla')
 
 class ContraChequeModelAdmin(admin.ModelAdmin):
-    list_display = ['matricula', 'mes', 'exercicio']
+    list_display = ['matricula', 'mes', 'exercicio','decimoTerceiro']
     search_fields = ('matricula__numero', 'mes', 'exercicio')
 
 
