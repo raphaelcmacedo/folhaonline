@@ -84,7 +84,7 @@ class ContraCheque(models.Model):
 
 
     def save(self, *args, **kwargs):
-        old = ContraCheque.objects.contracheques_by_matricula_mes(self.matricula, self.mes, self.exercicio)
+        old = ContraCheque.objects.contracheques_by_matricula_mes(self.matricula, self.mes, self.exercicio, self.decimoTerceiro)
         if old is not None:
             old.delete()
             #delete_file(old)
