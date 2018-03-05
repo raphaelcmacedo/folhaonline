@@ -10,12 +10,14 @@ class Orgao (models.Model):
     BOM_JARDIM = 'BOM_JARDIM'
     CAMBUCI = 'CAMBUCI'
     TRAJANO_DE_MORAES = 'TRAJANO_DE_MORAES'
+    SAO_FIDELIS = 'SAO_FIDELIS'
 
 
     MUNICIPIOS = (
         (BOM_JARDIM, 'Bom Jardim'),
         (CAMBUCI, 'Cambuci'),
         (TRAJANO_DE_MORAES, 'Trajano de Moraes'),
+        (SAO_FIDELIS, 'São Fidélis'),
 
     )
 
