@@ -3,6 +3,7 @@ import re
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils._os import upath
 
 from folha.core.connectors.pdf import convert_pdf_to_txt
 from folha.core.util import mes_string_to_int
@@ -40,8 +41,10 @@ def read_matricula_cambuci(f):
 
     nome_completo = find_field_cambuci(lines, 'Nome do Funcionário')
     nome_parts = nome_completo.split(' ')
-    nome = nome_parts[0]
-    sobrenome = ' '.join(nome_parts[1:])
+
+    up_to_last_30_slice = slice(-30, None)
+    nome = nome_parts[0][up_to_last_30_slice]
+    sobrenome = ' '.join(nome_parts[1:])[up_to_last_30_slice]
     nunero_matricula = find_field_cambuci(lines, 'Matricula')
     matricula.numero = nunero_matricula
 
