@@ -5,13 +5,17 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
 from folha.core.connectors.pdf import pdf_to_txt_pypdf
+from folha.core.connectors.pdf import convert_pdf_to_txt
 from folha.core.models import Matricula
 from folha.core.util import mes_string_to_int
 
 REGEX_CPF = r'(^[0-9]{3}[\.][0-9]{3}[\.][0-9]{3}[-][0-9]{2})'
 
 def read_informe_rendimento(f, orgao):
-    lines = pdf_to_txt_pypdf(f)
+    try:
+        lines = pdf_to_txt_pypdf(f)
+    except:
+        lines = convert_pdf_to_txt(f)
     contra_cheques = []
     from folha.core.models import ContraCheque
 
