@@ -15,7 +15,10 @@ def read_informe_rendimento(f, orgao):
     try:
         lines = pdf_to_txt_pypdf(f)
     except:
-        lines = convert_pdf_to_txt(f)
+        try:
+            lines = convert_pdf_to_txt(f)
+        except Exception as e: print(e)
+
     contra_cheques = []
     from folha.core.models import ContraCheque
 

@@ -24,6 +24,7 @@ def mes_string_to_int(mes):
         'Janeiro': 1,
         'Fevereiro': 2,
         'Março': 3,
+        'Marco': 3,
         'Abril': 4,
         'Maio': 5,
         'Junho': 6,
