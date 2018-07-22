@@ -29,6 +29,12 @@ def read_contra_cheque_cambuci(f, matriculas_dict):
             mesAno = line.split('/')
             contra_cheque.mes = mes_string_to_int(mesAno[0].strip())
             contra_cheque.exercicio = mesAno[1].strip()
+        elif '13º Salário' in line:  # Verifica se achou ano e mês baseado na regra MM / aaaa em caso de 13²º
+            contra_cheque.decimoTerceiro = True
+            line = line.replace('13º Salário (1º Parc.) - ', '').replace('.', '').strip()
+            mesAno = line.split('/')
+            contra_cheque.mes = mes_string_to_int(mesAno[0].strip())
+            contra_cheque.exercicio = mesAno[1].strip()
 
     return contra_cheque
 
