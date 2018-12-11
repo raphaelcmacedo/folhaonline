@@ -36,4 +36,4 @@ def mes_string_to_int(mes):
         'Dezembro': 12,
     }
 
-    return meses[mes]
+    return meses[mes.capitalize()]
