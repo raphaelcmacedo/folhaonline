@@ -31,8 +31,7 @@ def read_contra_cheque_cambuci(f, matriculas_dict):
             contra_cheque.exercicio = mesAno[1].strip()
         elif '13º Salário' in line or '13º Salario' in line:  # Verifica se achou ano e mês baseado na regra MM / aaaa em caso de 13²º
             contra_cheque.decimoTerceiro = True
-            line = line.replace('13º Salário (1º Parc.) - ', '').replace('.', '').strip()
-            line = line.replace('13º Salario - Parcela Final - ', '').replace('.', '').strip()
+            line = clean_decimo_terceiro(line)
             mesAno = line.split('/')
             if len(mesAno) >= 2:
                 contra_cheque.mes = mes_string_to_int(mesAno[0].strip())
@@ -40,6 +39,12 @@ def read_contra_cheque_cambuci(f, matriculas_dict):
 
     return contra_cheque
 
+def clean_decimo_terceiro(line):
+    line = line.replace('13º Salário (1º Parc.) - ', '').replace('.', '').strip()
+    line = line.replace('13º Salário (2º Parc) - ', '').replace('.', '').strip()
+    line = line.replace('13º Salario - Parcela Final - ', '').replace('.', '').strip()
+
+    return line
 
 def read_matricula_cambuci(f):
     lines = convert_pdf_to_txt(f)
