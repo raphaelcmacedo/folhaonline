@@ -20,6 +20,7 @@ class ContraChequeUploadForm(forms.Form):
      formato_choices =(
           ('SAPITUR', 'Sapitur'),
           ('CAMBUCI', 'Cambuci'),
+          ('SAOFIDELIS', 'São Fidélis'),
           ('DIRF', 'DIRF'),
      )
 

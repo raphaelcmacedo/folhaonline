@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 
 from folha.core.connectors.cambuci import read_matricula_cambuci, read_contra_cheque_cambuci
+from folha.core.connectors.saofidelis import read_matricula_saofidelis, read_contra_cheque_saofidelis
 from folha.core.connectors.dirf import read_informe_rendimento
 from folha.core.connectors.sapitur import read_contra_cheque_sapitur, read_matricula_sapitur
 from folha.core.google import insert_file
@@ -61,6 +62,9 @@ def upload_contra_cheque_file(f, orgao, formato, matriculas_dict):
     elif formato == 'CAMBUCI':
         contra_cheque = read_contra_cheque_cambuci(f, matriculas_dict)
         contra_cheques.append(contra_cheque)
+    elif formato == 'SAOFIDELIS':
+        contra_cheque = read_contra_cheque_saofidelis(f, matriculas_dict)
+        contra_cheques.append(contra_cheque)
     elif formato == 'DIRF':
         contra_cheques = read_informe_rendimento(f, orgao)
     else:
@@ -78,6 +82,8 @@ def register_matricula(f, orgao, formato):
         matricula = read_matricula_sapitur(f)
     elif formato == 'CAMBUCI':
         matricula = read_matricula_cambuci(f)
+    elif formato == 'SAOFIDELIS':
+        matricula = read_matricula_saofidelis(f)
     else:
         raise ValidationError('Formato ' + formato + ' inesperado')
     matricula.orgao = orgao
