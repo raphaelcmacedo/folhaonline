@@ -8,7 +8,6 @@ from django.utils._os import upath
 from folha.core.connectors.pdf import convert_pdf_to_txt
 from folha.core.util import mes_string_to_int
 
-REGEX_MATRICULA_SAOFIDELIS = r'\d{4}$'
 REGEX_MES_ANO_SAOFIDELIS = r'de \d{4}$'
 REGEX_CPF = r'(^[0-9]{3}[\.][0-9]{3}[\.][0-9]{3}[-][0-9]{2})'
 
@@ -19,7 +18,7 @@ def read_contra_cheque_saofidelis(f, matriculas_dict):
     contra_cheque = ContraCheque()
 
     #Matricula
-    nunero_matricula = find_regex_saofidelis(lines, REGEX_MATRICULA_SAOFIDELIS)
+    nunero_matricula = lines[14]
     try:
         contra_cheque.matricula = matriculas_dict[nunero_matricula]
     except:
@@ -53,7 +52,7 @@ def read_matricula_saofidelis(f):
     up_to_last_30_slice = slice(-30, None)
     nome = nome_parts[0][up_to_last_30_slice]
     sobrenome = ' '.join(nome_parts[1:])[up_to_last_30_slice]
-    nunero_matricula = find_regex_saofidelis(lines, REGEX_MATRICULA_SAOFIDELIS)
+    nunero_matricula = lines[14]
     cpf = clean_cpf(find_regex_saofidelis(lines, REGEX_CPF))
     matricula.numero = nunero_matricula
 
