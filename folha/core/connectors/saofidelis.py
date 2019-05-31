@@ -18,7 +18,7 @@ def read_contra_cheque_saofidelis(f, matriculas_dict):
     contra_cheque = ContraCheque()
 
     #Matricula
-    nunero_matricula = lines[14]
+    nunero_matricula = find_matricula_sao_fidelis(lines)
     try:
         contra_cheque.matricula = matriculas_dict[nunero_matricula]
     except:
@@ -52,7 +52,7 @@ def read_matricula_saofidelis(f):
     up_to_last_30_slice = slice(-30, None)
     nome = nome_parts[0][up_to_last_30_slice]
     sobrenome = ' '.join(nome_parts[1:])[up_to_last_30_slice]
-    nunero_matricula = lines[14]
+    nunero_matricula = find_matricula_sao_fidelis(lines)
     cpf = clean_cpf(find_regex_saofidelis(lines, REGEX_CPF))
     matricula.numero = nunero_matricula
 
@@ -69,6 +69,14 @@ def read_matricula_saofidelis(f):
     matricula.user = user
 
     return matricula
+
+def find_matricula_sao_fidelis(lines):
+    result = lines[14]
+    if result == "PIS":
+        result = lines[10]
+
+    return result
+
 
 def find_field_saofidelis(lines, field):
     labelFound = False
