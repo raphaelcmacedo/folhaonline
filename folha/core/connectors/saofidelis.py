@@ -27,9 +27,10 @@ def read_contra_cheque_saofidelis(f, matriculas_dict):
     for i, line in enumerate(lines):
         if re.search(REGEX_MES_ANO_SAOFIDELIS, line):  # Verifica se achou ano e mês baseado na regra MMMM de aaaa
             mesAno = line.split('de')
-            contra_cheque.mes = mes_string_to_int(mesAno[0].strip())
+            contra_cheque.mes = mes_string_to_int(mesAno[0].replace(" ",""))
             contra_cheque.exercicio = mesAno[1].strip()
-            break
+        elif '13º' in line:
+            contra_cheque.decimoTerceiro = True
 
     return contra_cheque
 
@@ -74,6 +75,10 @@ def find_matricula_sao_fidelis(lines):
     result = lines[14]
     if result == "PIS":
         result = lines[10]
+    elif re.search('[a-zA-Z]', result):
+        result = lines[33]
+    elif not result:
+        result = lines[102]
 
     return result
 
