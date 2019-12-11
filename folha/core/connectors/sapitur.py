@@ -27,8 +27,8 @@ def read_contra_cheque_sapitur(f, matriculas_dict):
             continue
 
         if ' / ' in line:  # Verifica se achou ano e mês baseado na regra MM / aaaa
-            if 'parcela' in line:
-                line = line.lower().replace(' - segunda parcela 13º','')
+            if 'parcela' in line.lower():
+                line = line.lower().replace(' - segunda parcela 13º','').replace(' - 13 2ª parcela','')
                 contra_cheque.decimoTerceiro = True
 
             mesAno = line.split('/')
